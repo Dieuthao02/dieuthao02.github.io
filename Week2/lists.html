@@ -10,7 +10,10 @@
         padding: 40px;
         color: #2a4d69;  
         line-height: 1.5;
-       
+        max-width: 600px;
+        margin: 40px auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
     h1 {
         color: #2a4d69; 
@@ -20,15 +23,18 @@
         border-radius: 5px;
         margin-top: 0;
         margin-bottom: 0px;
-       
+        text-align: center;
     }
     .roman-list { 
         list-style-type: upper-roman; 
+        margin-top: 0;
         margin-bottom: 20px;
         color: #2a4d69;
-    }
+        font-size: 18px; 
+         }
     .roman-list > li {
         margin-bottom: 20px;
+        font-weight: bold;
     }
     .alpha-list { 
         list-style-type: lower-alpha; 
@@ -63,13 +69,13 @@
 <body>
 <h1>Lists Example</h1>
     <ol class="roman-list">
-        <li>List item 1
+        <li>List item 1</li>
             <ol class="alpha-list">
                 <li>Nested item 1.1</li>
                 <li>Nested item 1.2</li>
             </ol>
         </li>
-        <li>List item 2
+        <li>List item 2</li>
             <ol>
                 <li>Nested item 2.1</li>
                 <li>Nested item 2.2
@@ -82,14 +88,13 @@
                 <li>Nested item 2.3</li>
             </ol>
         </li>
-        <li>List item 3
+        <li>List item 3</li>
             <ul>
                 <li>Nested item 3.1</li>
                 <li>Nested item 3.2</li>
                 <li>Nested item 3.3</li>
-            </ul>
-        </li>
-    </ol>
-
-</body>
+           </ul>
+            </li>
+        </ol>
+    </body> 
 </html>

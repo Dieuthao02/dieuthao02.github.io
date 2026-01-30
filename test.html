@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Lists</title>
+    <style>
+    body {
+        background-color: #f0f8ff;
+        font-family: 'Times New Roman', serif; /* Đã sửa tên font */
+        padding: 40px;
+        color: #2a4d69;  
+        line-height: 1.5;
+    }
+    
+    /* Lớp bọc nội dung để tạo khung trắng */
+    .content-box {
+        background-color: #f0f8ff
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #2a4d69; 
+        font-size: 48px;          
+        margin-top: 0;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .roman-list { 
+        list-style-type: upper-roman; 
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #2a4d69;
+        font-size: 18px;
+    } /* ĐÃ THÊM DẤU ĐÓNG NGOẶC QUAN TRỌNG Ở ĐÂY */
+
+    .roman-list > li {
+        margin-bottom: 20px;
+        font-weight: bold; /* Tự động in đậm cả số La Mã và chữ mục chính */
+    }
+
+    /* Đưa các mục con về chữ thường cho hài hòa */
+    .roman-list li li {
+        font-weight: normal;
+    }
+
+    .alpha-list { 
+        list-style-type: lower-alpha; 
+        margin-top: 8px;
+        margin-bottom: 15px;
+    }
+
+    ol, ul {
+        margin-left: 20px;
+    }
+
+    ul {
+        list-style: none;      
+    }
+
+    ul > li {
+        position: relative;
+        padding-left: 15px;
+        margin-bottom: 6px;
+    }
+
+    ul > li::before {
+        content: "–";          
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+    <div class="content-box"> <h1>Lists Example</h1>
+        <ol class="roman-list">
+            <li>List item 1 <ol class="alpha-list">
+                    <li>Nested item 1.1</li>
+                    <li>Nested item 1.2</li>
+                </ol>
+            </li>
+            <li>List item 2
+                <ol>
+                    <li>Nested item 2.1</li>
+                    <li>Nested item 2.2
+                        <ul>
+                            <li>Nested item 2.2.1</li>
+                            <li>Nested item 2.2.2</li>
+                            <li>Nested item 2.2.3</li>
+                        </ul>
+                    </li>
+                    <li>Nested item 2.3</li>
+                </ol>
+            </li>
+            <li>List item 3
+                <ul>
+                    <li>Nested item 3.1</li>
+                    <li>Nested item 3.2</li>
+                    <li>Nested item 3.3</li>
+                </ul>
+            </li>
+        </ol>
+    </div> </body>
+</html>
