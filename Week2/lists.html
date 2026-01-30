@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Lists</title>
+    <style>
+    body {
+        background-color: #f0f8ff;
+        font-family: 'Times New Roman', serif;
+        padding: 40px;
+        color: #222;
+        line-height: 1.5;
+    }
+       h1 {
+            color: #2a4d69; /* Màu xanh đậm */
+            background-color: #f0f8ff; /* Màu nền nhạt */
+            padding: 10px;
+            border-radius: 5px;
+    }
+    .roman-list { 
+        list-style-type: upper-roman; 
+        margin-bottom: 30px;
+        color: #2a4d69;
+    }
+    .roman-list > li {
+        margin-bottom: 20px;
+    }
+    .alpha-list { 
+        list-style-type: lower-alpha; 
+        margin-top: 8px;
+        margin-bottom: 15px;
+        color: #2a4d69;
+    }
+    ol {
+        margin-left: 20px;
+        color: #2a4d69;
+    }
+    ul {
+        list-style: none;       /* bỏ kiểu dấu mặc định */
+        margin-left: 20px;
+        color: #2a4d69;
+    }
+    ul > li {
+        position: relative;
+        padding-left: 15px;
+        margin-bottom: 6px;
+    }
+    ul > li::before {
+        content: "–";           /* gạch ngang */
+        position: absolute;
+        left: 0;
+        color: #2a4d69;         /* màu gạch ngang */
+        font-weight: bold;
+    }
+</style>
+
+</head>
+<body>
+<h1>Lists Example</h1>
+    <ol class="roman-list">
+        <li>List item 1
+            <ol class="alpha-list">
+                <li>Nested item 1.1</li>
+                <li>Nested item 1.2</li>
+            </ol>
+        </li>
+        <li>List item 2
+            <ol>
+                <li>Nested item 2.1</li>
+                <li>Nested item 2.2
+                    <ul>
+                        <li>Nested item 2.2.1</li>
+                        <li>Nested item 2.2.2</li>
+                        <li>Nested item 2.2.3</li>
+                    </ul>
+                </li>
+                <li>Nested item 2.3</li>
+            </ol>
+        </li>
+        <li>List item 3
+            <ul>
+                <li>Nested item 3.1</li>
+                <li>Nested item 3.2</li>
+                <li>Nested item 3.3</li>
+            </ul>
+        </li>
+    </ol>
+
+</body>
+</html>
