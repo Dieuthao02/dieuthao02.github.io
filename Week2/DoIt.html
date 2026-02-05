@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<title>Text Formatting - Upgraded</title>
+<style>
+ body {
+    font-family: 'Time New Roman', serif;
+    max-width: 700px;
+    margin: 40px auto;
+    background: #ffffff;
+    color: #222;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+h2 {
+    color: #007acc;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.6rem;
+    font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+p {
+    font-size: 1.2rem;
+    margin: 18px 0;
+    line-height: 1.7;
+    color: #444;
+}
+p b {
+    color: #005a9c;
+    font-weight: 700;
+}
+pre {
+    background-color: #272c34;
+    color: #f8f8f2;
+    padding: 20px 25px;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 1rem;
+    line-height: 1.5;
+    box-shadow: 0 4px 25px rgba(0,122,204,0.4);
+    transition: box-shadow 0.3s ease;
+}
+pre:hover {
+    box-shadow: 0 6px 35px rgba(0,122,204,0.7);
+    cursor: text;
+}
+.marquee-container {
+    width: 100%;
+    overflow: hidden;
+    border: 2px solid #007acc;
+    border-radius: 8px;
+    margin-top: 40px;
+    background: #e6f0ff;
+    color: #007acc;
+    font-weight: 700;
+    user-select: none;
+    height: 45px;
+    position: relative;
+    box-shadow: inset 0 2px 8px rgba(0,122,204,0.2);
+}
+.marquee-text {
+    display: inline-block;
+    white-space: nowrap;
+    padding-left: 100%;
+    animation: marquee 12s linear infinite;
+    font-size: 1.2rem;
+    line-height: 45px;
+}
+.marquee-container:hover .marquee-text {
+    animation-play-state: paused;
+    cursor: pointer;
+}
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+</style>
+</head>
+<body>
+    <h2>Text Formatting</h2>
+   <p>
+    <b>Chemical:</b> Acid Sulfuric: 
+    <span style="color: magenta;">H<sub>2</sub>SO<sub>4</sub></span>
+</p>
+
+<p>
+    <b>Mathematic:</b> Equation: 
+    <span style="color: blue;">ax<sup>2</sup> + bx + c = 0</span>
+</p>
+
+<p>
+    <b>Technical:</b> <span style="color: rgb(7, 179, 64);">Print result:</span>
+</p>
+    <pre>
+int num, res;
+printf("--- TEST THE NUMBER IS EVEN OR ODD ---");
+scanf("%d", &num);
+res = num % 2;
+if (res == 0)
+    printf("The number is Even");
+else
+    printf("The number is Odd");
+    </pre>
+
+    <div class="marquee-container" title="Hover to pause scrolling">
+        <div class="marquee-text">
+            Using the HTML marquee element to insert a scrolling area of text.
+        </div>
+    </div>
+</body>
+</html>

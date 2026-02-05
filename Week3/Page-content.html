@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Content</title>
+
+<style>
+    /* ===== RESET & BIẾN MÀU ===== */
+    :root {
+        --primary: #002d5e;
+        --accent: #085094;
+        --text-dark: #2c2c2c;
+        --white: #ffffff;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: #f5f7fb;
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: var(--text-dark);
+        line-height: 1.6;
+    }
+
+    /* ===== SECTION ===== */
+    section {
+        max-width: 900px;
+        margin: 40px auto 80px;
+        padding: 0 20px;
+    }
+
+    /* ===== ARTICLE ===== */
+    article {
+        background-color: var(--white);
+        border-radius: 12px;
+        padding: 25px 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        border-left: 6px solid var(--accent);
+        transition: transform 0.25s ease;
+    }
+
+    article:hover {
+        transform: translateY(-4px);
+    }
+
+    h1 {
+        margin-top: 0;
+        font-size: 28px;
+        color: var(--primary);
+    }
+
+    header p {
+        margin-top: 4px;
+        font-style: italic;
+        color: #666;
+    }
+
+    article > p {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+        article {
+            padding: 20px;
+        }
+
+        article > p {
+            font-size: 17px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<section>
+    <article>
+        <header>
+            <h1>Just Another Day</h1>
+            <p>Written by Christina on January 11th</p>
+        </header>
+        <p>This is my second blog entry, and I just wanted to check in on you.</p>
+    </article>
+
+    <article>
+        <header>
+            <h1>My First Blog Entry</h1>
+            <p>Written by Christina on January 10th</p>
+        </header>
+        <p>I'm so happy to write my first blog entry – yay!</p>
+    </article>
+</section>
+
+</body>
+</html>
