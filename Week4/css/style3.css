@@ -3,19 +3,19 @@ body {
     color: white;
     font-family: 'Time new roman', sans-serif;
     margin: 0;
-    /* Không dùng flex ở body nếu không bọc mọi thứ vào container */
+    
     display: block; 
 }
 
 .container {
     width: 90%;
-    max-width: 1000px; /* Tăng độ rộng để Timeline thoải mái hơn */
-    margin: 0 auto;    /* Căn giữa container */
+    max-width: 1000px; 
+    margin: 0 auto;    
     padding: 40px 0;
     text-align: center;
 }
 
-/* Header & Avatar */
+
 .name {
     font-size: 2.5rem;
     letter-spacing: 2px;
@@ -23,10 +23,11 @@ body {
 .name span { color: #00ff88; }
 .avatar { 
     width: 100%; 
-    height: 100%;       /* Phải có chiều cao để xác định khung hình vuông */
+    height: 100%;       
     border-radius: 50%; 
-    object-fit: cover;   /* Lệnh này giúp ảnh tự cắt gọn vào vòng tròn mà không bị bẹp */
+    object-fit: cover;   
     display: block;
+    object-position: 45% 100%;
 }
 .avatar-border {
     width: 120px;
@@ -34,7 +35,7 @@ body {
     margin: 0 auto 20px;
     border: 3px solid #00ff88;
     border-radius: 50%;
-    padding: 0;          /* Nên để padding bằng 0 hoặc rất nhỏ (2-3px) để ảnh lấp đầy hơn */
+    padding: 0;          
     box-shadow: 0 0 15px #00ff88;
     overflow: hidden; 
     display: flex;
@@ -43,15 +44,15 @@ body {
 }
 .avatar { width: 100%; border-radius: 50%; }
 
-/*text dưới avatar*/
+
 .marquee-container {
     width: 100%;
-    max-width: 400px; /* Độ rộng vùng hiển thị chữ chạy */
+    max-width: 400px; 
     margin: 15px auto;
-    overflow: hidden; /* Ẩn phần chữ dư thừa bên ngoài */
+    overflow: hidden; 
     white-space: nowrap;
     position: relative;
-    background: rgba(0, 255, 136, 0.05); /* Nền xanh mờ nhẹ */
+    background: rgba(0, 255, 136, 0.05); 
     border-top: 1px solid rgba(0, 255, 136, 0.2);
     border-bottom: 1px solid rgba(0, 255, 136, 0.2);
     padding: 5px 0;
@@ -59,7 +60,7 @@ body {
 
 .marquee-content {
     display: inline-block;
-    padding-left: 100%; /* Bắt đầu chạy từ ngoài mép phải */
+    padding-left: 100%; 
     animation: marquee 15s linear infinite;
 }
 
@@ -72,24 +73,24 @@ body {
     letter-spacing: 1px;
 }
 
-/* Hiệu ứng chuyển động */
+
 @keyframes marquee {
     0% { transform: translateX(0); }
     100% { transform: translateX(-100%); }
 }
 
 .social-links a {
-    color: white; /* Hoặc màu #00ff88 để giống màu chủ đạo của bạn */
-    text-decoration: none; /* Bỏ gạch chân mặc định */
-    transition: 0.3s; /* Tạo hiệu ứng mượt khi di chuột */
+    color: white; 
+    text-decoration: none; 
+    transition: 0.3s; 
 }
 
 .social-links a:hover {
-    color: #00ff88; /* Chuyển màu xanh neon khi di chuột vào */
-    text-shadow: 0 0 10px #00ff88; /* Thêm hiệu ứng phát sáng cho giống style hiện tại */
+    color: #00ff88; 
+    text-shadow: 0 0 10px #00ff88; 
 }
 
-/* Skill Circles */
+
 .stats {
     display: flex;
     justify-content: space-around;
@@ -99,7 +100,7 @@ body {
     width: 80px;
     height: 80px;
     border: 4px solid #1f2937;
-    border-top: 4px solid #00ff88; /* Giả lập vòng load */
+    border-top: 4px solid #00ff88; 
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -110,14 +111,14 @@ body {
 }
 
 
-/* --- Timeline / Journey --- */
+
 .journey {
     position: relative;
     padding: 40px 0;
     margin: 40px 0;
 }
 
-/* Đường kẻ dọc màu xanh */
+
 .journey::before {
     content: '';
     position: absolute;
@@ -138,7 +139,7 @@ body {
 .milestone.left { text-align: right; left: 0; }
 .milestone.right { text-align: left; left: 50%; }
 
-/* Chấm tròn giữa đường line */
+
 .milestone::after {
     content: '';
     position: absolute;
@@ -166,11 +167,11 @@ body {
     display: block;
 }
 
-/* --- Contact Form --- */
+
 .contact {
-    margin-top: 10px; /* Tạo khoảng cách lớn với phần Timeline phía trên */
+    margin-top: 10px; 
     padding: 40px 0;
-    clear: both; /* Đảm bảo không bị ảnh hưởng bởi các thành phần trước đó */
+    clear: both; 
     text-align: center;
 }
 
@@ -178,7 +179,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    max-width: 450px; /* Thu nhỏ form lại một chút cho sang */
+    max-width: 450px; 
     margin: 0 auto;
 }
 
@@ -199,7 +200,7 @@ body {
     box-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
 }
 
-/* Nút Send Message chuẩn xanh Neon */
+
 .btn-send {
     background: linear-gradient(90deg, #00ff88, #00bd63);
     color: #0d1117;
@@ -413,8 +414,6 @@ h1:hover, h2:hover {
 
 
 
-
-
 :root {
   --c-main: #00ff88;
 }
@@ -467,7 +466,7 @@ h1:hover, h2:hover {
 
 body{ cursor:none; }
 
-/* main cursor */
+
 .cursor{
   position:fixed;
   width:20px;height:20px;
@@ -479,14 +478,14 @@ body{ cursor:none; }
  
 }
 
-/* svg icon */
+
 .cursor-icon{
   width:100%;height:100%;
   fill:currentColor;
   transition:transform .25s ease;
 }
 
-/* hover ring */
+
 .cursor-ring{
   position:fixed;
   width:36px;height:36px;
@@ -500,7 +499,7 @@ body{ cursor:none; }
   box-shadow:0 0 25px var(--cursor-color);
 }
 
-/* states */
+
 .cursor.hover .cursor-icon{
   transform:scale(1.8);
 }
@@ -515,7 +514,7 @@ body{ cursor:none; }
 
 body{ cursor:none; }
 
-/* main cursor */
+
 .cursor{
   position:fixed;
   width:20px;height:20px;
@@ -526,14 +525,14 @@ body{ cursor:none; }
   filter:drop-shadow(0 0 10px var(--cursor-color));
 }
 
-/* svg icon */
+
 .cursor-icon{
   width:100%;height:100%;
   fill:currentColor;
   transition:transform .25s ease;
 }
 
-/* hover ring */
+
 .cursor-ring{
   position:fixed;
   width:36px;height:36px;
@@ -547,7 +546,7 @@ body{ cursor:none; }
   box-shadow:0 0 25px var(--cursor-color);
 }
 
-/* states */
+
 .cursor.hover .cursor-icon{
   transform:scale(1.8);
 }
@@ -562,7 +561,7 @@ body{ cursor:none; }
 
 body{ cursor:none; }
 
-/* main cursor */
+
 .cursor{
   position:fixed;
   width:20px;height:20px;
@@ -573,15 +572,12 @@ body{ cursor:none; }
   filter:drop-shadow(0 0 10px var(--cursor-color));
 }
 
-/* svg icon */
+
 .cursor-icon{
   width:100%;height:100%;
   fill:currentColor;
   transition:transform .25s ease;
 }
-
-
-
 
 
 .project-link {
@@ -590,3 +586,5 @@ body{ cursor:none; }
     display: block;
 
 }
+
+

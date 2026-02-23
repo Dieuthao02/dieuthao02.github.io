@@ -1,4 +1,3 @@
-
 const cursor = document.querySelector('.cursor');
 const trails = [];
 const trailCount = 12;
@@ -104,7 +103,7 @@ document.addEventListener('click', e=>{
   setTimeout(()=>r.remove(), 500);
 });
 
-let enabled = !matchMedia('(pointer: coarse)').matches; // tắt trên mobile
+let enabled = !matchMedia('(pointer: coarse)').matches; 
 document.body.style.cursor = enabled ? 'none' : 'auto';
 cursor.style.display = enabled ? 'block' : 'none';
 
@@ -114,5 +113,62 @@ document.getElementById('toggleCursor').onclick = ()=>{
   document.body.style.cursor = enabled ? 'none' : 'auto';
 };
 
+
+const form = document.querySelector(".contact-form");
+
+form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    
+    const originalFormHTML = form.innerHTML;
+    const formData = new FormData(form);
+
+   
+    const { error } = await window.supabase
+        .from('Dieuthao') 
+        .insert([{
+            name: formData.get('name'),
+            email: formData.get('email'),
+            message: formData.get('message')
+        }]);
+
+    if (error) {
+        alert("Lỗi gửi tin: " + error.message);
+    } else {
+        
+        form.innerHTML = `
+            <div id="success-state" style="text-align: center; cursor: pointer; padding: 20px; border: 1px dashed #00ff88; border-radius: 8px;">
+                <h3 style="color:#00ff88; margin-bottom: 10px;">Message Sent ✨</h3>
+                <p style="color: #ccc; font-size: 0.9rem;">(Click here to send another message)</p>
+            </div>
+        `;
+
+        
+        document.getElementById("success-state").addEventListener("click", function() {
+            form.innerHTML = originalFormHTML;
+          
+        });
+    }
+});
+
+
+
+const contactForm = document.getElementById("contactForm");
+const formContent = document.getElementById("form-content");
+const successMsg = document.getElementById("success-msg");
+
+contactForm.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    formContent.style.display = "none"; 
+    successMsg.style.display = "block"; 
+});
+
+
+successMsg.addEventListener("click", function() {
+    contactForm.reset();           
+    successMsg.style.display = "none";
+    formContent.style.display = "block";
+});
 
 

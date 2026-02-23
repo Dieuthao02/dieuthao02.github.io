@@ -8,13 +8,13 @@
     
 </head>
 <body>
-    
+
 <button id="toggleCursor" class="cursor-toggle">✨ Cursor</button>
 
   <div class="container">
     <header class="profile">
         <div class="avatar-border">
-            <img src="../img/dieuthao.jpg" alt="Avatar" class="avatar">
+            <img src="../img/Dieuthao.jpg" alt="Avatar" class="avatar">
         </div>
         <h1 class="name">DIEU<span>THAO</span></h1>
 
@@ -42,7 +42,7 @@
             <p>Creativity</p>
         </div>
         <div class="stat-item">
-            <div class="circle">88</div>
+            <div class="circle">90</div>
             <p>Development</p>
         </div>
         <div class="stat-item">
@@ -55,14 +55,14 @@
     <section class="journey">
         <div class="milestone left">
             <div class="content">
-                <span class="year">2024</span>
-                <p>Mastered Web Development</p>
+                <span class="year">2025 - Present</span>
+                <p>International School</p>
             </div>
         </div>
         <div class="milestone right">
             <div class="content">
-                <span class="year">2023</span>
-                <p>Started Creative Journey</p>
+                <span class="year">2022 - 2025</span>
+                <p>Thanh Liem B High School</p>
             </div>
         </div>
     </section>
@@ -98,20 +98,48 @@
 
 
     <section class="contact">
-        <h2>Get in Touch</h2>
-        
-        <form class="contact-form">
-            <input type="text" placeholder="Name" required>
-            <input type="email" placeholder="Email" required>
-            <textarea placeholder="Message" rows="4"></textarea>
-            <button type="submit" class="btn-send">SEND MESSAGE</button>
-        </form>
+   <h2>Get in Touch</h2>
+
+    
+    <form class="contact-form">
+
+    <input type="text" name="name" placeholder="Name" required>
+
+    <input type="email" name="email" placeholder="Email" required>
+
+    <textarea name="message" placeholder="Message" required></textarea>
+
+    <button type="submit" class="btn-send">
+        SEND MESSAGE
+    </button>
+ 
+<input type="hidden" name="_redirect" value="false">
+<div id="success-msg" style="display: none; text-align: center; cursor: pointer;">
+        <h3 style="color:#00ff88">Message Sent ✨</h3>
+        <p>Click to send another</p>
+    </div>
+</form>
+
+</section>
+
+
     </section>
     </div>
 
 
     <div class="cursor"></div>
-  <script src="js/script3.js"> </script>
 
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const supabaseUrl = 'https://tcyvwehwadmakcwlieed.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjeXZ3ZWh3YWRtYWtjd2xpZWVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MTc3MTEsImV4cCI6MjA4NjM5MzcxMX0.wXyvuEls8ZdWF2vXLYK1H3DLMi2cflXOyeBYxqsOvyI'; // key của bạn
+  const { createClient } = window.supabase;
+  window.supabase = createClient(supabaseUrl, supabaseKey);
+  
+</script>
+
+<script src="js/script3.js"></script>
 </body>
 </html>
