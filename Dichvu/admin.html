@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Trị Astra Mystic | Thông báo Real-time</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CSS Đặc thù cho Admin */
+        .admin-layout { display: flex; min-height: 100vh; background: #050208; color: #e0d9e5; }
+        .sidebar { width: 280px; background: rgba(255,255,255,0.02); border-right: 1px solid rgba(212, 175, 55, 0.2); padding: 40px 20px; }
+        .main-panel { flex: 1; padding: 40px; position: relative; }
+        .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        
+        .btn-gold {
+            background: transparent; color: var(--primary-gold); border: 1px solid var(--primary-gold);
+            padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;
+            display: flex; align-items: center; gap: 8px; transition: 0.3s;
+        }
+        .btn-gold:hover { background: var(--primary-gold); color: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+
+        .table-wrapper { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { text-align: left; padding: 15px; color: var(--primary-gold); border-bottom: 1px solid rgba(212, 175, 55, 0.2); font-size: 0.85rem; }
+        td { padding: 18px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+
+        .time-badge { color: #888; font-size: 0.8rem; }
+       .status-pill {
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        background: rgba(212, 175, 55, 0.05);
+        color: var(--primary-gold);
+        text-transform: uppercase;
+    }
+  
+        .btn-delete { background: none; border: none; color: #ff5e5e; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
+        .btn-delete:hover { transform: scale(1.2); }
+        .fb-link { color: #4267B2; text-decoration: none; display: flex; align-items: center; gap: 5px; }
+        .fb-link:hover { text-decoration: underline; }
+        .sidebar nav a {
+        text-decoration: none !important;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    /* Loại bỏ gạch chân cho link liên hệ trong bảng */
+    .fb-link, .generic-link {
+        text-decoration: none !important;
+        color: #4267B2;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        max-width: 200px; /* Giới hạn độ dài để không vỡ bảng */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .fb-link:hover {
+        opacity: 0.8;
+    }
+
+    /* Bo tròn bảng và hiệu ứng */
+    .table-wrapper td {
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    /* Highlight màu cho tab đang hoạt động */
+    .sidebar nav a.active {
+        color: var(--primary-gold) !important;
+        opacity: 1 !important;
+    }
+    </style>
+</head>
+<body class="admin-layout">
+
+    <aside class="sidebar">
+    <div class="logo">ASTRA<span>ADMIN</span></div>
+    <nav style="margin-top: 50px; display: flex; flex-direction: column; gap: 20px;">
+        <a href="#" id="menu-dashboard" class="active" onclick="switchTab('dashboard')">
+            <i class="ri-dashboard-line"></i> Bảng điều khiển
+        </a>
+        <a href="#" id="menu-history" onclick="switchTab('history')">
+            <i class="ri-history-line"></i> Lịch sử lưu trữ
+        </a>
+        <a href="#" style="color: #fff; opacity: 0.6; text-decoration: none;">
+            <i class="ri-settings-3-line"></i> Cài đặt
+        </a>
+    </nav>
+</aside>
+
+<main class="main-panel">
+    <div class="action-bar">
+        <div>
+            <h1 id="page-title" style="font-size: 1.8rem;">Danh Sách Khách Hàng</h1>
+            <p id="page-desc" style="opacity: 0.5; font-size: 0.9rem;">Dữ liệu cập nhật theo thời gian thực</p>
+        </div>
+        <button class="btn-gold" onclick="exportExcel()">
+            <i class="ri-file-excel-line"></i> Xuất CSV (Excel)
+        </button>
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ngày gửi đơn</th>
+                    <th>Khách Hàng</th>
+                    <th>Liên hệ </th>
+                    <th>Lịch hẹn xem</th>
+                    <th>Dịch Vụ</th>
+                    <th id="th-status">Trạng Thái</th>
+                    <th id="th-action">Xóa</th>
+                </tr>
+            </thead>
+            <tbody id="table-content"></tbody>
+        </table>
+    </div>
+</main>
+
+    <script>
+    let currentTab = 'dashboard'; // dashboard hoặc history
+
+window.addEventListener('load', () => {
+    if (Notification.permission !== 'granted') Notification.requestPermission();
+    renderTable();
+});
+
+function switchTab(tab) {
+    currentTab = tab;
+    
+    // Cập nhật class Active để CSS nhận diện (loại bỏ gạch chân thủ công nế cần)
+    const dashMenu = document.getElementById('menu-dashboard');
+    const histMenu = document.getElementById('menu-history');
+
+    dashMenu.className = tab === 'dashboard' ? 'active' : '';
+    histMenu.className = tab === 'history' ? 'active' : '';
+
+    // Cập nhật Style trực tiếp để đảm bảo
+    dashMenu.style.color = tab === 'dashboard' ? 'var(--primary-gold)' : '#fff';
+    dashMenu.style.opacity = tab === 'dashboard' ? '1' : '0.6';
+    histMenu.style.color = tab === 'history' ? 'var(--primary-gold)' : '#fff';
+    histMenu.style.opacity = tab === 'history' ? '1' : '0.6';
+
+    document.getElementById('page-title').innerText = tab === 'dashboard' ? 'Danh Sách Khách Hàng' : 'Lịch Sử Lưu Trữ';
+    document.getElementById('th-action').innerText = tab === 'dashboard' ? 'Xóa' : 'Xóa vĩnh viễn';
+    
+    renderTable();
+}
+
+function renderTable() {
+    const storageKey = currentTab === 'dashboard' ? 'mystic_bookings' : 'mystic_history';
+    const data = JSON.parse(localStorage.getItem(storageKey)) || [];
+    const container = document.getElementById('table-content');
+    container.innerHTML = '';
+
+    [...data].reverse().forEach((item, index) => {
+        const originalIndex = data.length - 1 - index;
+        
+        // --- XỬ LÝ LINK LIÊN HỆ HIỆN THEO LINK ---
+        let rawLink = item.facebook || "";
+        let displayLink = rawLink.replace(/^(https?:\/\/)?(www\.)?/, ''); // Cắt bớt https:// cho gọn
+        let iconClass = "ri-link";
+
+        if (rawLink.includes("facebook.com") || rawLink.includes("fb.com")) {
+            iconClass = "ri-facebook-box-fill";
+        } else if (rawLink.includes("instagram.com")) {
+            iconClass = "ri-instagram-line";
+        }
+
+        let serviceName = item.service || 'Tarot';
+
+        container.innerHTML += `
+            <tr>
+                <td><span class="time-badge">${item.date || '---'}</span></td>
+                <td><strong>${item.name}</strong></td>
+                <td>
+                    <a href="${rawLink.startsWith('http') ? rawLink : 'https://' + rawLink}" 
+                       target="_blank" class="fb-link" title="${rawLink}">
+                        <i class="${iconClass}"></i> ${displayLink || 'Trống'}
+                    </a>
+                </td>
+                <td><span style="color: #00ffcc;">${item.bookingSlot || 'Chưa chọn'}</span></td>
+                <td><span class="status-pill" style="border-color: #00ffcc; color: #00ffcc;">${serviceName.toUpperCase()}</span></td>
+                <td><span class="status-pill">${currentTab === 'dashboard' ? 'Mới' : 'Đã lưu trữ'}</span></td>
+                <td>
+                    <button class="btn-delete" onclick="handleDelete(${originalIndex})">
+                        <i class="${currentTab === 'dashboard' ? 'ri-delete-bin-line' : 'ri-delete-bin-7-fill'}"></i>
+                    </button>
+                    ${currentTab === 'history' ? `
+                        <button class="btn-delete" style="color: #00ffcc; margin-left:10px" onclick="restoreEntry(${originalIndex})">
+                            <i class="ri-restart-line"></i>
+                        </button>` : ''}
+                </td>
+            </tr>
+        `;
+    });
+}
+
+// --- LOGIC XỬ LÝ XÓA ---
+function handleDelete(idx) {
+    if (currentTab === 'dashboard') {
+        // Nếu đang ở Dashboard: Di chuyển vào Lịch sử
+        if(confirm('Di chuyển khách hàng này vào mục Lịch sử lưu trữ?')) {
+            let bookings = JSON.parse(localStorage.getItem('mystic_bookings')) || [];
+            let history = JSON.parse(localStorage.getItem('mystic_history')) || [];
+
+            // Lấy phần tử bị xóa ra và đẩy vào lịch sử
+            const removedItem = bookings.splice(idx, 1)[0];
+            history.push(removedItem);
+
+            localStorage.setItem('mystic_bookings', JSON.stringify(bookings));
+            localStorage.setItem('mystic_history', JSON.stringify(history));
+            renderTable();
+        }
+    } else {
+        // Nếu đang ở History: Xóa vĩnh viễn
+        if(confirm('CẢNH BÁO: Hành động này sẽ xóa vĩnh viễn dữ liệu và không thể khôi phục. Tiếp tục?')) {
+            let history = JSON.parse(localStorage.getItem('mystic_history')) || [];
+            history.splice(idx, 1);
+            localStorage.setItem('mystic_history', JSON.stringify(history));
+            renderTable();
+        }
+    }
+}
+
+// --- KHÔI PHỤC (Từ Lịch sử về Dashboard) ---
+function restoreEntry(idx) {
+    let bookings = JSON.parse(localStorage.getItem('mystic_bookings')) || [];
+    let history = JSON.parse(localStorage.getItem('mystic_history')) || [];
+
+    const restoredItem = history.splice(idx, 1)[0];
+    bookings.push(restoredItem);
+
+    localStorage.setItem('mystic_bookings', JSON.stringify(bookings));
+    localStorage.setItem('mystic_history', JSON.stringify(history));
+    renderTable();
+}
+
+// --- Lắng nghe Real-time ---
+window.addEventListener('storage', (e) => {
+    if (e.key === 'mystic_bookings' && currentTab === 'dashboard') {
+        renderTable();
+        // Thông báo đơn mới giữ nguyên...
+    }
+});
+    </script>
+</body>
+</html>

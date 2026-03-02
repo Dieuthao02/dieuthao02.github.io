@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astra Mystic | Tư Vấn Tâm Linh </title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="loader">
+        <div class="loader-circle"></div>
+        <p>Đang kết nối năng lượng...</p>
+    </div>
+
+    <div id="stars-container"></div>
+    <div class="cursor-glow"></div>
+
+    <header>
+        <nav class="container">
+            <div class="logo">ASTRA<span>MYSTIC</span></div>
+            <ul class="nav-links">
+                <li><a href="#home">Trang chủ</a></li>
+                <li><a href="#about">Giới thiệu</a></li>
+                <li><a href="#services">Dịch vụ</a></li>
+                <li><a href="#booking">Đặt lịch</a></li>
+            </ul>
+            <div class="nav-btns">
+                <i class="ri-moon-line theme-toggle"></i>
+                <div class="mobile-menu-btn"><i class="ri-menu-3-line"></i></div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <h1 class="reveal">Khám Phá Định Mệnh <br> Qua Những <span>Vì Sao</span></h1>
+            <p class="reveal-delay">Khi những vì sao không còn là ẩn số, bạn chính là người viết tiếp định mệnh của chính mình.</p>
+            <div class="hero-actions reveal-delay-2">
+                <a href="#booking" class="btn btn-primary">Đặt lịch ngay</a>
+                <a href="#services" class="btn btn-outline">Tìm hiểu thêm</a>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <div class="mouse"></div>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Dịch Vụ Tư Vấn</h2>
+                <div class="line"></div>
+            </div>
+            <div class="service-grid">
+                <div class="service-card reveal-up">
+                    <i class="ri-ancient-gate-line"></i>
+                    <h3>Coi Tarot</h3>
+                    <p>Giải mã thông điệp từ vũ trụ qua các lá bài, định hướng tương lai.</p>
+                </div>
+                <div class="service-card reveal-up">
+                    <i class="ri-compass-3-line"></i>
+                    <h3>Coi Tử Vi</h3>
+                    <p>Luận giải lá số, vận hạn và những cột mốc quan trọng đời người.</p>
+                </div>
+                <div class="service-card reveal-up">
+                    <i class="ri-planet-line"></i>
+                    <h3>Bản Đồ Sao</h3>
+                    <p>Phân tích tâm lý, tính cách và sứ mệnh cá nhân qua hệ hành tinh.</p>
+                </div>
+                <div class="service-card reveal-up">
+                    <i class="ri-heart-2-line"></i>
+                    <h3>Tình Duyên & Sự Nghiệp</h3>
+                    <p>Tư vấn chuyên sâu giúp bạn tháo gỡ vướng mắc trong các mối quan hệ.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="slider-container">
+                <div class="slide active">
+                    <p class="quote">"Một trải nghiệm thực sự thay đổi tư duy của tôi. Những lời khuyên rất sát thực tế và đầy năng lượng."</p>
+                    <h5>- Minh Anh, Marketing Manager</h5>
+                </div>
+                <div class="slide">
+                    <p class="quote">"Cảm ơn chị đã giúp em hiểu rõ hơn về bản thân qua bản đồ sao. Mọi thứ trở nên rõ ràng hơn bao giờ hết."</p>
+                    <h5>- Thu Thủy, Creative Designer</h5>
+                </div>
+                <div class="slide">
+                    <p class="quote">"Không gian tư vấn nhẹ nhàng, thông tin đưa ra vô cùng chính xác về tính cách của mình."</p>
+                    <h5>- Hoàng Nam, Freelancer</h5>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking" class="booking">
+        <div class="container">
+            <div class="booking-wrapper reveal-up">
+                <div class="booking-info">
+                    <h2>Kết nối với chúng tôi</h2>
+                    <p>Hãy để lại thông tin, Astra Mystic sẽ liên hệ tư vấn bạn trong vòng 24h.</p>
+                </div>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <input type="text" id="name" placeholder="Họ và tên khách hàng" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="url" id="facebook" placeholder="Link Facebook/Instagram của bạn " required>
+                    </div>
+                    <div class="form-row" style="display: flex; gap: 10px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label style="font-size: 0.8rem; color: var(--primary-gold); margin-left: 5px;">Ngày muốn xem:</label>
+                            <input type="date" id="booking-date" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label style="font-size: 0.8rem; color: var(--primary-gold); margin-left: 5px;">Giờ muốn xem:</label>
+                            <input type="time" id="booking-time" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <select id="service" required>
+                            <option value="">Chọn dịch vụ bạn quan tâm</option>
+                            <option value="tarot">Coi Tarot</option>
+                            <option value="tuvi">Coi Tử Vi</option>
+                            <option value="stars">Bản đồ sao cá nhân</option>
+                            <option value="career">Tư vấn Tình duyên - Sự nghiệp</option>
+                            <option value="other">Khác (Tư vấn theo yêu cầu)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">Gửi yêu cầu đặt lịch ngay</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo">ASTRA<span>MYSTIC</span></div>
+                    <p>Dẫn lối tâm hồn bằng trí tuệ cổ xưa và năng lượng vũ trụ hiện đại.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Liên hệ</h4>
+                    <p>Email: dieuthao02800@gmail.com</p>
+                    <p>Hotline: 0378 217 462</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Mạng xã hội</h4>
+<div class="socials">
+    <a href="https://facebook.com/dieuthao02" target="_blank" title="Facebook">
+        <i class="ri-facebook-fill"></i>
+    </a>
+
+    <a href="https://instagram.com/diaro08" target="_blank" title="Instagram">
+        <i class="ri-instagram-line"></i>
+    </a>
+
+    <a href="https://tiktok.com/otis0208" target="_blank" title="TikTok">
+        <i class="ri-tiktok-line"></i>
+    </a>
+</div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 Astra Mystic. Designed with Soul.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
