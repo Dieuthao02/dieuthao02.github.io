@@ -335,18 +335,18 @@ input, select {
 }
 
 select option {
-    background-color: #1a0a2a; /* Màu nền tối (hợp với vibe Mystic) */
-    color: #fff; /* Chữ trắng để nhìn rõ */
+    background-color: #1a0a2a; 
+    color: #fff;
     padding: 10px;
 }
 
-/* Hiệu ứng khi di chuột qua các lựa chọn */
+
 select option:hover {
     background-color: var(--primary-gold);
     color: #000;
 }
 
-/* Nếu bạn dùng trên mobile (iOS/Android) */
+
 select:focus {
     outline: none;
     border-color: var(--primary-gold);
@@ -388,22 +388,40 @@ footer {
 
 .copyright { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.8rem; }
 
-/* Loại bỏ gạch chân cho tất cả các link trong phần socials */
+
 .socials a {
-    text-decoration: none; /* Quan trọng nhất: xóa gạch chân */
-    color: inherit;        /* Giữ nguyên màu sắc ban đầu của icon */
-    display: inline-block; /* Cho phép icon có khoảng cách và hiệu ứng tốt hơn */
-    transition: transform 0.3s ease; /* Thêm hiệu ứng mượt mà khi di chuột */
+    text-decoration: none; 
+    color: inherit;        
+    display: inline-block; 
+    transition: transform 0.3s ease; 
 }
 
-/* Hiệu ứng nhẹ khi di chuột vào logo (tùy chọn) */
+
 .socials a:hover {
-    transform: translateY(-3px); /* Logo nhích lên một chút cho chuyên nghiệp */
-    opacity: 0.8;                /* Làm mờ nhẹ để khách biết là đã chạm vào */
+    transform: translateY(-3px);
+    opacity: 0.8;               
 }
 
-/* Đảm bảo icon bên trong không bị dính gạch chân */
+
 .socials i {
     font-style: normal;
     vertical-align: middle;
+}
+
+
+#other-details {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05); 
+    border: 1px solid var(--primary-gold);
+    border-radius: 8px;
+    color: white;
+    font-family: inherit;
+    margin-top: 10px;
+    outline: none;
+    resize: none; 
+}
+
+#other-details:focus {
+    box-shadow: 0 0 10px var(--primary-gold);
 }

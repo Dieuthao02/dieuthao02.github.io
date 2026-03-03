@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* CSS Đặc thù cho Admin */
+    
         .admin-layout { display: flex; min-height: 100vh; background: #050208; color: #e0d9e5; }
         .sidebar { width: 280px; background: rgba(255,255,255,0.02); border-right: 1px solid rgba(212, 175, 55, 0.2); padding: 40px 20px; }
         .main-panel { flex: 1; padding: 40px; position: relative; }
@@ -51,14 +51,14 @@
         transition: 0.3s;
     }
 
-    /* Loại bỏ gạch chân cho link liên hệ trong bảng */
+  
     .fb-link, .generic-link {
         text-decoration: none !important;
         color: #4267B2;
         display: inline-flex;
         align-items: center;
         gap: 5px;
-        max-width: 200px; /* Giới hạn độ dài để không vỡ bảng */
+        max-width: 200px; 
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -68,12 +68,12 @@
         opacity: 0.8;
     }
 
-    /* Bo tròn bảng và hiệu ứng */
+   
     .table-wrapper td {
         border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     
-    /* Highlight màu cho tab đang hoạt động */
+    
     .sidebar nav a.active {
         color: var(--primary-gold) !important;
         opacity: 1 !important;
@@ -109,24 +109,24 @@
     </div>
     <div class="table-wrapper">
         <table>
-            <thead>
-                <tr>
-                    <th>Ngày gửi đơn</th>
-                    <th>Khách Hàng</th>
-                    <th>Liên hệ </th>
-                    <th>Lịch hẹn xem</th>
-                    <th>Dịch Vụ</th>
-                    <th id="th-status">Trạng Thái</th>
-                    <th id="th-action">Xóa</th>
-                </tr>
-            </thead>
+          <thead>
+    <tr>
+        <th>Ngày gửi đơn</th>
+        <th>Khách Hàng</th>
+        <th>Liên hệ</th>
+        <th>Lịch hẹn xem</th>
+        <th>Dịch Vụ</th>
+        <th>Chi tiết yêu cầu</th> <th id="th-status">Trạng Thái</th>
+        <th id="th-action">Xóa</th>
+    </tr>
+</thead>
             <tbody id="table-content"></tbody>
         </table>
     </div>
 </main>
 
     <script>
-    let currentTab = 'dashboard'; // dashboard hoặc history
+    let currentTab = 'dashboard'; 
 
 window.addEventListener('load', () => {
     if (Notification.permission !== 'granted') Notification.requestPermission();
@@ -136,14 +136,14 @@ window.addEventListener('load', () => {
 function switchTab(tab) {
     currentTab = tab;
     
-    // Cập nhật class Active để CSS nhận diện (loại bỏ gạch chân thủ công nế cần)
+   
     const dashMenu = document.getElementById('menu-dashboard');
     const histMenu = document.getElementById('menu-history');
 
     dashMenu.className = tab === 'dashboard' ? 'active' : '';
     histMenu.className = tab === 'history' ? 'active' : '';
 
-    // Cập nhật Style trực tiếp để đảm bảo
+   
     dashMenu.style.color = tab === 'dashboard' ? 'var(--primary-gold)' : '#fff';
     dashMenu.style.opacity = tab === 'dashboard' ? '1' : '0.6';
     histMenu.style.color = tab === 'history' ? 'var(--primary-gold)' : '#fff';
@@ -164,18 +164,24 @@ function renderTable() {
     [...data].reverse().forEach((item, index) => {
         const originalIndex = data.length - 1 - index;
         
-        // --- XỬ LÝ LINK LIÊN HỆ HIỆN THEO LINK ---
+       
         let rawLink = item.facebook || "";
-        let displayLink = rawLink.replace(/^(https?:\/\/)?(www\.)?/, ''); // Cắt bớt https:// cho gọn
+        let displayLink = rawLink.replace(/^(https?:\/\/)?(www\.)?/, '');
         let iconClass = "ri-link";
+        if (rawLink.includes("facebook.com") || rawLink.includes("fb.com")) iconClass = "ri-facebook-box-fill";
+        else if (rawLink.includes("instagram.com")) iconClass = "ri-instagram-line";
 
-        if (rawLink.includes("facebook.com") || rawLink.includes("fb.com")) {
-            iconClass = "ri-facebook-box-fill";
-        } else if (rawLink.includes("instagram.com")) {
-            iconClass = "ri-instagram-line";
-        }
-
+      
         let serviceName = item.service || 'Tarot';
+        if (serviceName.toLowerCase() === 'other') {
+    serviceName = item.otherDetails ? item.otherDetails : 'Other';
+}
+
+
+if (serviceName.length > 30) {
+    serviceName = serviceName.substring(0, 27) + '...';
+}
+        let otherDetails = item.otherDetails ? item.otherDetails : '<span style="opacity:0.3">-</span>';
 
         container.innerHTML += `
             <tr>
@@ -188,7 +194,12 @@ function renderTable() {
                     </a>
                 </td>
                 <td><span style="color: #00ffcc;">${item.bookingSlot || 'Chưa chọn'}</span></td>
-                <td><span class="status-pill" style="border-color: #00ffcc; color: #00ffcc;">${serviceName.toUpperCase()}</span></td>
+                <td><span class="status-pill" style="border-color: #d4af37; color: #d4af37;">${serviceName.toUpperCase()}</span></td>
+                
+                <td style="max-width: 200px; white-space: normal; word-wrap: break-word; font-size: 0.85rem; color: #bbb;">
+        ${otherDetails}
+    </td>
+
                 <td><span class="status-pill">${currentTab === 'dashboard' ? 'Mới' : 'Đã lưu trữ'}</span></td>
                 <td>
                     <button class="btn-delete" onclick="handleDelete(${originalIndex})">
@@ -204,15 +215,15 @@ function renderTable() {
     });
 }
 
-// --- LOGIC XỬ LÝ XÓA ---
+
 function handleDelete(idx) {
     if (currentTab === 'dashboard') {
-        // Nếu đang ở Dashboard: Di chuyển vào Lịch sử
+        
         if(confirm('Di chuyển khách hàng này vào mục Lịch sử lưu trữ?')) {
             let bookings = JSON.parse(localStorage.getItem('mystic_bookings')) || [];
             let history = JSON.parse(localStorage.getItem('mystic_history')) || [];
 
-            // Lấy phần tử bị xóa ra và đẩy vào lịch sử
+        
             const removedItem = bookings.splice(idx, 1)[0];
             history.push(removedItem);
 
@@ -221,7 +232,7 @@ function handleDelete(idx) {
             renderTable();
         }
     } else {
-        // Nếu đang ở History: Xóa vĩnh viễn
+      
         if(confirm('CẢNH BÁO: Hành động này sẽ xóa vĩnh viễn dữ liệu và không thể khôi phục. Tiếp tục?')) {
             let history = JSON.parse(localStorage.getItem('mystic_history')) || [];
             history.splice(idx, 1);
@@ -231,7 +242,7 @@ function handleDelete(idx) {
     }
 }
 
-// --- KHÔI PHỤC (Từ Lịch sử về Dashboard) ---
+
 function restoreEntry(idx) {
     let bookings = JSON.parse(localStorage.getItem('mystic_bookings')) || [];
     let history = JSON.parse(localStorage.getItem('mystic_history')) || [];
@@ -244,12 +255,46 @@ function restoreEntry(idx) {
     renderTable();
 }
 
-// --- Lắng nghe Real-time ---
+
 window.addEventListener('storage', (e) => {
     if (e.key === 'mystic_bookings' && currentTab === 'dashboard') {
         renderTable();
-        // Thông báo đơn mới giữ nguyên...
+       
     }
+});
+
+
+
+const contactForm = document.getElementById('contactForm');
+
+contactForm.addEventListener('submit', function(e) {
+    e.preventDefault(); 
+
+   
+    const name = document.getElementById('name').value;
+    const facebook = document.getElementById('facebook').value;
+    const service = document.getElementById('service').value;
+    const otherDetails = document.getElementById('other-details').value; 
+    const bDate = document.getElementById('booking-date').value;
+    const bTime = document.getElementById('booking-time').value;
+
+    const formData = {
+        name: name,
+        facebook: facebook,
+        service: service,
+        otherDetails: otherDetails, 
+        bookingSlot: bDate + ' ' + bTime,
+        date: new Date().toLocaleString('vi-VN')
+    };
+
+    
+    let bookings = JSON.parse(localStorage.getItem('mystic_bookings')) || [];
+    bookings.push(formData);
+    localStorage.setItem('mystic_bookings', JSON.stringify(bookings));
+
+    alert('Gửi yêu cầu thành công!');
+    contactForm.reset(); 
+    document.getElementById('other-service-wrapper').style.display = 'none'; 
 });
     </script>
 </body>

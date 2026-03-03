@@ -1,4 +1,4 @@
-// 1. Loading Animation
+
 window.addEventListener('load', () => {
     const loader = document.querySelector('.loader');
     if (loader) {
@@ -9,7 +9,7 @@ window.addEventListener('load', () => {
     }
 });
 
-// 2. Tạo hiệu ứng sao lấp lánh (Starry Background)
+
 const createStars = () => {
     const container = document.getElementById('stars-container');
     if (!container) return;
@@ -29,7 +29,7 @@ const createStars = () => {
 };
 createStars();
 
-// 3. Cursor Glow Effect
+
 const cursor = document.querySelector('.cursor-glow');
 if (cursor) {
     document.addEventListener('mousemove', (e) => {
@@ -38,7 +38,7 @@ if (cursor) {
     });
 }
 
-// 4. Header Scroll Change
+
 window.addEventListener('scroll', () => {
     const header = document.querySelector('header');
     if (header) {
@@ -46,7 +46,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// 5. Scroll Reveal Animation
+
 const observerOptions = { threshold: 0.1 };
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -58,7 +58,7 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
 
-// 6. Testimonial Slider
+
 const slides = document.querySelectorAll('.slide');
 let currentSlide = 0;
 
@@ -72,47 +72,55 @@ if (slides.length > 0) {
     setInterval(nextSlide, 5000);
 }
 
-// 7. Form Validation & Local Storage (ĐÃ SỬA LỖI KHỚP HTML)
+
 const contactForm = document.getElementById('contactForm');
 if(contactForm) {
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        // Lấy dữ liệu từ các trường (Đảm bảo ID khớp với HTML)
+      
         const name = document.getElementById('name').value;
         const facebook = document.getElementById('facebook').value;
         const bDate = document.getElementById('booking-date').value;
         const bTime = document.getElementById('booking-time').value;
         const service = document.getElementById('service').value;
         
-        // Thời gian khách gửi form
+      
+        const otherDetails = document.getElementById('other-details').value; 
+        
         const now = new Date();
         const submittedAt = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN');
 
+      
         const newBooking = { 
             name, 
-            facebook, // Đã bỏ email vì HTML bạn đã xóa ô này
+            facebook, 
             bookingSlot: `${bDate} lúc ${bTime}`, 
             service, 
+            otherDetails, 
             date: submittedAt 
         };
 
-        // Lưu vào LocalStorage
+       
         let bookings = JSON.parse(localStorage.getItem('mystic_bookings')) || [];
         bookings.push(newBooking);
         localStorage.setItem('mystic_bookings', JSON.stringify(bookings));
 
-        // Thông báo thành công
-        alert(`Cảm ơn ${name}! Astra Mystic đã nhận yêu cầu đặt lịch cho dịch vụ ${service.toUpperCase()}. Chúng tôi sẽ liên hệ qua Facebook/Instagram của bạn sớm nhất.`);
+       
+        const serviceDisplay = service === 'other' ? (otherDetails || 'Yêu cầu khác') : service.toUpperCase();
+        alert(`Cảm ơn ${name}! Astra Mystic đã nhận yêu cầu cho dịch vụ: ${serviceDisplay}. Chúng tôi sẽ liên hệ bạn sớm nhất.`);
         
+       
         contactForm.reset();
+        const otherServiceWrapper = document.getElementById('other-service-wrapper');
+        if(otherServiceWrapper) otherServiceWrapper.style.display = 'none';
         
-        // Cập nhật sự kiện cho trang Admin
+    
         window.dispatchEvent(new Event('storage'));
     });
 }
 
-// 8. Dark Mode Toggle
+
 const themeToggle = document.querySelector('.theme-toggle');
 if (themeToggle) {
     themeToggle.addEventListener('click', () => {
@@ -122,7 +130,7 @@ if (themeToggle) {
     });
 }
 
-// 9. Parallax Effect cho Hero
+
 window.addEventListener('scroll', () => {
     const scroll = window.pageYOffset;
     const heroContent = document.querySelector('.hero-content');
@@ -130,4 +138,23 @@ window.addEventListener('scroll', () => {
         heroContent.style.transform = `translateY(${scroll * 0.4}px)`;
         heroContent.style.opacity = 1 - (scroll / 600);
     }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const serviceSelect = document.getElementById('service');
+    const otherServiceWrapper = document.getElementById('other-service-wrapper');
+    const otherDetailsInput = document.getElementById('other-details');
+
+    serviceSelect.addEventListener('change', function() {
+        if (this.value === 'other') {
+          
+            otherServiceWrapper.style.display = 'block';
+            otherDetailsInput.setAttribute('required', 'required');
+        } else {
+            
+            otherServiceWrapper.style.display = 'none';
+            otherDetailsInput.removeAttribute('required');
+        }
+    });
 });
