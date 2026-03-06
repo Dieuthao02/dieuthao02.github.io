@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Lịch sử giao dịch - Flower Shop</title>
+    <link rel="stylesheet" href="css/FlowerShop.css">
+    <style>
+        #history_content { padding: 30px; background: #fff; min-height: 500px; }
+        .order-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .order-table th, .order-table td { border: 1px solid #ddd; padding: 15px; text-align: left; }
+        .order-table th { background-color: #fff0f5; color: #d81b60; }
+        .status-done { color: #2ecc71; font-weight: bold; }
+        .no-order { text-align: center; padding: 20px; color: #888; }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <header id="header">
+        <div id="logo"><a href="index.html"><img src="../img/tải xuống (7).jpg" alt="Logo"></a></div>
+        <nav id="menu_top">
+            <ul class="level1">
+                <li><a href="index.html">Quay về trang chủ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="history_content">
+        <h2 class="title" id="user-history-title">Lịch sử mua hàng của bạn</h2>
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Ngày mua</th>
+                    <th>Sản phẩm</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody id="order-history-data">
+                </tbody>
+        </table>
+    </main>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        const historyTable = document.getElementById("order-history-data");
+        const titleEl = document.getElementById("user-history-title");
+
+        if (!currentUser) {
+            alert("Bạn cần đăng nhập để xem lịch sử!");
+            window.location.href = "login.html";
+            return;
+        }
+
+        if(titleEl) titleEl.innerText = "Lịch sử mua hàng của: " + (currentUser.name || currentUser.username);
+
+   
+        const allOrders = JSON.parse(localStorage.getItem("orders")) || [];
+        
+    
+        const myName = currentUser.name || currentUser.username;
+        const myOrders = allOrders.filter(order => order.customerName === myName);
+
+    
+        if (myOrders.length === 0) {
+            historyTable.innerHTML = '<tr><td colspan="5" class="no-order">Bạn chưa có đơn hàng nào.</td></tr>';
+            return;
+        }
+
+        historyTable.innerHTML = myOrders.reverse().map(order => `
+            <tr>
+                <td><b>${order.id}</b></td>
+                <td>${order.date}</td>
+                <td>${Array.isArray(order.items) ? order.items.join("<br>") : order.items}</td>
+                <td>$${order.total}</td>
+                <td><span class="status-done">${order.status}</span></td>
+            </tr>
+        `).join('');
+    });
+</script>
+</body>
+</html>
