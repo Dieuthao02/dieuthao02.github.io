@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title> Registration</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap');
+
+        :root {
+            --bg: #03000a;
+            --accent: #00d2ff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% 50%, #101525 0%, #03000a 100%);
+            color: #fff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            width: 95%;
+            max-width: 1200px;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+        }
+
+        
+        .left-side { padding: 40px; border-right: 1px solid var(--border); overflow-y: auto; max-height: 90vh; }
+        
+        .form-header {
+            background: linear-gradient(90deg, #005a8e, #00d2ff);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-weight: bold;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-family: 'Orbitron';
+            letter-spacing: 2px;
+        }
+
+        .input-group { margin-bottom: 12px; display: grid; grid-template-columns: 150px 1fr; align-items: center; }
+        .label { font-size: 0.85rem; font-weight: 600; color: #aaa; }
+
+        input[type="text"], input[type="password"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        
+        input[type="file"] { color: #888; font-size: 0.8rem; }
+
+        
+        .check-group { display: flex; gap: 15px; font-size: 0.9rem; }
+        select option {
+    background-color: #1a1a1a; 
+    color: #ffffff;    
+    padding: 10px;
+}
+
+        
+        .lang-container { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
+        .lang-chip {
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .lang-chip.active { background: var(--accent); color: #000; font-weight: bold; border-color: var(--accent); }
+
+        .btn-row { margin-top: 25px; display: flex; gap: 10px; }
+        .btn-row button {
+            flex: 1; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; transition: 0.3s;
+        }
+        .btn-submit { background: var(--accent); color: #000; }
+        .btn-reset { background: #222; color: #fff; }
+
+        
+        .right-side {
+            padding: 40px;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .clock-card {
+            text-align: center;
+            background: rgba(255,255,255,0.02);
+            padding: 40px 20px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            width: 100%;
+        }
+
+        #t_val { 
+            font-size: 2.8rem; 
+            font-family: 'Orbitron'; 
+            color: var(--accent); 
+            text-shadow: 0 0 30px rgba(0,210,255,0.5); 
+            margin-bottom: 10px;
+        }
+        #d_val { font-size: 0.8rem; color: #666; letter-spacing: 1px; }
+
+       
+        .clock-controls { 
+            margin-top: 30px; 
+            display: flex; 
+            justify-content: center; 
+        }
+        .clock-controls button {
+            padding: 10px 20px; 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid #444; 
+            color: #ccc; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-size: 0.75rem;
+            font-family: 'Orbitron';
+            transition: 0.3s;
+        }
+        .clock-controls button:hover { border-color: var(--accent); color: white; background: rgba(0, 210, 255, 0.1); }
+    </style>
+</head>
+<body onload="play()">
+
+<div class="main-container">
+    <div class="left-side">
+        <div class="form-header">REGISTER NEW ACCOUNT</div>
+        <form name="frmRegister" onsubmit="return formValid(event)">
+            <div class="input-group">
+                <div class="label">Username</div>
+                <input type="text" name="txtUsername">
+            </div>
+            <div class="input-group">
+                <div class="label">Password</div>
+                <input type="password" name="txtPassword1">
+            </div>
+            <div class="input-group">
+                <div class="label">Confirm password</div>
+                <input type="password" name="txtPassword2">
+            </div>
+            
+            <div class="input-group">
+                <div class="label">Gender</div>
+                <div class="check-group">
+                    <label><input type="radio" name="rdGender" value="Male" checked> Male</label>
+                    <label><input type="radio" name="rdGender" value="Female"> Female</label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="label">Phone</div>
+                <input type="text" name="txtPhone" placeholder="0XXXXXXXXX">
+            </div>
+            <div class="input-group">
+                <div class="label">Email</div>
+                <input type="text" name="txtEmail">
+            </div>
+            
+            <div class="input-group">
+                <div class="label">Favourite</div>
+                <div class="check-group">
+                    <label><input type="checkbox" name="chkMusic"> Music</label>
+                    <label><input type="checkbox" name="chkReading"> Reading</label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="label">Picture</div>
+                <input type="file" name="filPicture">
+            </div>
+
+            <div class="input-group">
+                <div class="label">Description</div>
+                <textarea name="txtDescription" rows="2"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="label">Education</div>
+                <select name="selEdu">
+                    <option value="Aptech">Aptech</option>
+                    <option value="University">University</option>
+                    <option value="HighSchool">High School</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <div class="label">Language</div>
+                <div class="lang-container" id="langBox">
+                    <div class="lang-chip" onclick="toggleLang(this)">Vietnamese</div>
+                    <div class="lang-chip" onclick="toggleLang(this)">English</div>
+                    <div class="lang-chip" onclick="toggleLang(this)">French</div>
+                    <div class="lang-chip" onclick="toggleLang(this)">Japanese</div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="submit" class="btn-submit">REGISTER</button>
+                <button type="reset" class="btn-reset">RESET</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="right-side">
+        <div class="clock-card">
+            <div id="t_val">00:00:00 AM</div>
+            <div id="d_val">SYSTEM LOADING...</div>
+            
+            <div class="clock-controls">
+                <button onclick="play()">PLAY</button>
+                <button onclick="stopClock()">STOP</button>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; text-align: center;">
+            <div style="color: var(--accent); font-weight: bold; font-size: 0.7rem; letter-spacing: 3px;">HÀ NỘI, VIỆT NAM </div>
+            <div style="font-size: 2rem; margin: 10px 0;">26°C</div>
+            <div style="color: #444; font-size: 0.75rem; font-family: 'Orbitron';">WEATHER STATION</div>
+        </div>
+    </div>
+</div>
+
+<script>
+   
+    var timer = null;
+    function play() {
+        if (timer) clearTimeout(timer); 
+        var daysOfWeek = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+        var today = new Date();
+        
+        document.getElementById('d_val').innerText = daysOfWeek[today.getDay()].toUpperCase() + 
+            " • " + today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
+
+        var h = today.getHours();
+        var ampm = h >= 12 ? "PM" : "AM";
+        var hDisplay = h % 12 || 12;
+        var m = today.getMinutes().toString().padStart(2, '0');
+        var s = today.getSeconds().toString().padStart(2, '0');
+        
+        document.getElementById('t_val').innerHTML = hDisplay + ":" + m + ":" + s + " <small style='font-size:1.2rem; opacity:0.3'>" + ampm + "</small>";
+
+        timer = setTimeout(play, 1000);
+    }
+
+    function stopClock() { 
+        clearTimeout(timer); 
+        timer = null;
+    }
+
+   
+    function toggleLang(el) {
+        el.classList.toggle('active');
+    }
+
+   
+    function formValid(e) {
+        var f = document.frmRegister;
+        var phone_pattern = /^(\(0\d{1,3}\)\d{7})|(0\d{9,10})$/;
+        var email_pattern = /^[a-zA-Z]\w*(\.\w+)*@\w+(\.\w{2,3})+$/;
+
+        if(f.txtUsername.value == "") {
+            alert("Username can't be empty");
+            f.txtUsername.focus();
+            return false;
+        }
+        if(f.txtPassword1.value.length < 6) {
+            alert("Password length must be from 6 to 20 characters");
+            f.txtPassword1.focus();
+            return false;
+        }
+        if(f.txtPassword1.value != f.txtPassword2.value) {
+            alert("Password doesn't match");
+            f.txtPassword2.focus();
+            return false;
+        }
+        if (!phone_pattern.test(f.txtPhone.value)) {
+            alert("Invalid phone number!");
+            f.txtPhone.focus();
+            return false;
+        }
+        if (!email_pattern.test(f.txtEmail.value)) {
+            alert("Invalid email address");
+            f.txtEmail.focus();
+            return false;
+        }
+        if(!f.chkMusic.checked && !f.chkReading.checked) {
+            alert("You must select at least one favourite");
+            return false;
+        }
+        if(f.filPicture.value == "") {
+            alert("Please select your picture");
+            return false;
+        }
+        if(f.txtDescription.value == "") {
+            alert("Please enter description");
+            f.txtDescription.focus();
+            return false;
+        }
+
+        alert("All register information are correct.");
+        return true;
+    }
+</script>
+</body>
+</html>
