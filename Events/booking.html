@@ -247,7 +247,7 @@
                                 <p class="text-xl font-black text-green-400 tracking-tight">18 Tháng 04, 2026</p>
                             </div>
                             
-<button onclick="window.location.href='select.html'" class="ml-auto bg-[#2ecc71] hover:bg-[#27ae60] text-white px-6 py-2 rounded-xl font-black uppercase text-[10px]">
+<button onclick="goToSelect('21')" class="ml-auto bg-[#2ecc71] hover:bg-[#27ae60] text-white px-6 py-2 rounded-xl font-black uppercase text-[10px]">
     Mua vé ngay
 </button>
                         </div>
@@ -310,7 +310,7 @@
             </div>
 
             <div class="space-y-6">
-                <button class="w-full py-5 bg-[#2ecc71] text-white rounded-[1.5rem] font-black uppercase text-xs shadow-lg">Mua vé ngay</button>
+                <button onclick="goToSelect('21')" class="w-full py-5 bg-[#2ecc71] text-white rounded-[1.5rem] font-black uppercase text-xs shadow-lg">Mua vé ngay</button>
                 <div class="rounded-[2rem] overflow-hidden border border-white/10"><img src="https://image.ticketbox.vn/images/mastercard-banner.jpg" class="w-full"></div>
             </div>
         </div>
@@ -475,6 +475,18 @@
         }
 
         window.onload = () => renderCalendar(currentMonth, currentYear);
+
+        function goToSelect(id) {
+    // 1. Kiểm tra xem có ID truyền vào không, nếu không có thì báo lỗi (để Thảo dễ debug)
+    if (!id) {
+        console.error("Lỗi: Quên chưa truyền ID vào nút bấm rồi Thảo ơi!");
+        return;
+    }
+
+    // 2. Chuyển hướng sang trang select.html kèm theo ID tương ứng
+    // Ví dụ: select.html?id=21 hoặc select.html?id=den-vau-2026
+    window.location.href = `select.html?id=${id}`;
+}
         
     </script>
 </body>
