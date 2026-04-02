@@ -262,8 +262,8 @@ body{
     grid-column:2;
     background:#fbfaf7;
     border:1px solid #e8e2d8;
-    padding:166px; /* Giữ nguyên giá trị của bạn */
-    padding:16px;  /* Giá trị ghi đè thực tế */
+    padding:166px; 
+    padding:16px;  
     border-radius:12px;
     height:fit-content;
 }
