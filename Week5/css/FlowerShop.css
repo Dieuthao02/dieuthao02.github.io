@@ -1,6 +1,4 @@
-/* ==========================================================================
-   1. RESET & CẤU TRÚC CHUNG (WRAPPER, BODY)
-   ========================================================================== */
+/* 1. RESET & CẤU TRÚC CHUNG  */
 *{
     margin:0;
     padding:0;
@@ -22,9 +20,7 @@ body{
     overflow:hidden;
 }
 
-/* ==========================================================================
-   2. HEADER & MENU (LOGO, NAVIGATION, DROPDOWN)
-   ========================================================================== */
+/* 2. HEADER & MENU  */
 #header{
     display:flex;
     justify-content:space-between;
@@ -103,9 +99,7 @@ body{
     color:#000 !important;
 }
 
-/* ==========================================================================
-   3. LAYOUT CHÍNH (3 COLUMN GRID, TITLES, WELCOME)
-   ========================================================================== */
+/* 3. LAYOUT CHÍNH */
 #welcome{
     text-align:center;
     padding:14px;
@@ -137,9 +131,7 @@ body{
     font-weight:600;
 }
 
-/* ==========================================================================
-   4. PRODUCT CARDS (MAIN PRODUCTS)
-   ========================================================================== */
+/*  4. PRODUCT CARDS  */
 .product {
     animation: fadeUp .6s ease both;
     position: relative;
@@ -182,7 +174,7 @@ body{
     line-height:1.5;
 }
 
-/* Price & Badges for Main Products */
+/* Price & Badges */
 .product::after{
     position:absolute;
     right:18px;
@@ -242,9 +234,8 @@ body{
     color:white;
 }
 
-/* ==========================================================================
-   5. PROMOTION & CATEGORIES (SIDEBARS)
-   ========================================================================== */
+/* 5.SIDEBARS */
+
 /* PROMOTION */
 #promotion{
     grid-column:2;
@@ -336,9 +327,7 @@ body{
     right: 6px;
 }
 
-/* ==========================================================================
-   6. CART SYSTEM (PANEL, ICON, POPUP, ITEMS)
-   ========================================================================== */
+/* 6. CART SYSTEM  */
 #cart-icon{
     color:#e8e6e3;
     font-size:18px;
@@ -487,9 +476,7 @@ body{
     transform:translateY(0);
 }
 
-/* ==========================================================================
-   7. INVOICE MODAL & QR SYSTEM
-   ========================================================================== */
+/* 7. INVOICE MODAL & QR SYSTEMm*/
 #invoice-modal {
     display: none;
     position: fixed;
@@ -579,9 +566,7 @@ body{
 }
 .qr-overlay.show { display: block; }
 
-/* ==========================================================================
-   8. FOOTER
-   ========================================================================== */
+/* 8. FOOTER */
 #footer{
     display:flex;
     justify-content:space-between;
@@ -591,9 +576,7 @@ body{
     font-size:14px;
 }
 
-/* ==========================================================================
-   9. ANIMATIONS (KEYFRAMES)
-   ========================================================================== */
+/*  9. KEYFRAMES */
 @keyframes fadeUp{
     from{
         opacity:0;
@@ -617,9 +600,7 @@ body{
 .product:nth-child(3){ animation-delay:.2s; }
 .cart-shake { animation: shake-cart 0.4s ease-in-out; }
 
-/* ==========================================================================
-   10. PRINT SETTINGS (@MEDIA PRINT)
-   ========================================================================== */
+/* 10. PRINT SETTINGS  */
 @media print {
     #qr-to-zoom, 
     .no-print, 
