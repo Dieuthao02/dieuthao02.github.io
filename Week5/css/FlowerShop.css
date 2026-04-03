@@ -197,18 +197,6 @@ body{
 .product:nth-child(2)::after{ content:"$25"; }
 .product:nth-child(3)::after{ content:"$25"; }
 
-.product::before{
-    position:absolute;
-    top:12px;
-    left:-40px;
-    background:#c9a96e;
-    color:#fff;
-    font-size:12px;
-    padding:4px 45px;
-    transform:rotate(-45deg);
-    font-weight:600;
-    letter-spacing:1px;
-}
 
 /* Quick View & Buttons */
 .product .img{
