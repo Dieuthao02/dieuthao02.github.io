@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Flower Shop - Admin</title>
+    <link rel="stylesheet" href="css/FlowerShop.css" />
+    <style>
+        #admin_content { padding: 20px; background: #fff; min-height: 500px; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .admin-table th, .admin-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .admin-table th { background-color: #fce4ec; color: #d81b60; }
+        .admin-table tr:hover { background-color: #fff5f8; }
+        .btn-delete { background: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+        .realtime-badge { background: #4caf50; color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; vertical-align: middle; }
+    </style>
+</head>
+<body>
+    <script src="js/admin.js" defer></script>
+<div id="wrap">
+    <header id="header">
+        <div id="logo"><a href="#"><img src="../img/tải xuống (7).jpg" alt="Logo"></a></div>
+        <nav id="menu_top">
+            <ul class="level1">
+                <li><a href="index.html">Về trang chủ</a></li>
+                <li><a href="#" id="manage-customers" class="active">Quản lý khách hàng</a></li>
+                <li><a href="#" id="manage-messages">Quản lý lời nhắn</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="welcome">
+        <p>🌷 Chào mừng Admin! Danh sách này sẽ tự động cập nhật khi có khách đăng ký 🌷</p>
+    </div>
+
+    <main id="admin_content">
+        <h2 class="title"><img src="images/bullet5.gif" alt=""> <span id="title-text">Danh sách khách hàng mới</span></h2>
+        
+        <table class="admin-table">
+            <thead>
+                </thead>
+            <tbody id="customer-list">
+                </tbody>
+        </table>
+    </main>
+
+    <footer id="footer">
+        <div class="left"><strong>Flower Shop Co., Ltd - Admin Panel</strong></div>
+    </footer>
+</div>
+</body>
+</html>

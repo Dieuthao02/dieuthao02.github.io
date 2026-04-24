@@ -83,6 +83,20 @@ main {
 }
 
 
+main > article img {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 20px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+main > article img:hover {
+    transform: scale(1.05);
+
+}
+
 article {
     flex: 1 1 370px;
     max-width: 370px;
@@ -101,21 +115,6 @@ article:hover {
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
  
-
-main > article img {
-    width: 100%;
-    height: 200px;
-    margin-bottom: 20px;
-    object-fit: cover;
-    border-radius: 8px;
-    transition: transform 0.3s ease;
-}
-
-main > article img:hover {
-    transform: scale(1.05);
-
-}
-
 
 p {
     width: 100%;
