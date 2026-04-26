@@ -1,4 +1,3 @@
-    // --- 1. NHẬP LIỆU FIREBASE ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { firebaseConfig } from './firebase-config.js';
@@ -6,13 +5,20 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // --- 2. KHỞI TẠO DỮ LIỆU VÀ BIẾN TOÀN CỤC ---
-    let currentBalance = 4250000; 
+    let currentBalance = parseInt(localStorage.getItem('currentBalance')) || 50000;
+    function syncBalanceToUI(amount) {
+    const walletBalance = document.getElementById('balance-wallet');
+    if (walletBalance) {
+        walletBalance.innerText = `${new Intl.NumberFormat('vi-VN').format(amount)}đ`;
+        }
+    }
+
+    syncBalanceToUI(currentBalance);
+
     let selectedMethod = '';
     const authZone = document.getElementById('auth-zone');
     const dropdownMenu = document.getElementById('dropdown-menu');
 
-    // Hàm cập nhật thời gian 
     function updateRealTime() {
         const dateElement = document.getElementById('real-time-date');
         if (dateElement) {
@@ -98,53 +104,73 @@
         }
     });;
 
-    // --- 3. CÁC HÀM LOGIC  ---
     function updateBalanceUI(newAmount) {
-        const walletBalance = document.getElementById('balance-wallet');
-        if (!walletBalance) return;
+    const walletBalance = document.getElementById('balance-wallet');
+    if (!walletBalance) return;
 
-        const start = currentBalance;
-        const end = newAmount;
-        const duration = 1000; 
-        let startTime = null;
+    const start = currentBalance; 
+    const end = newAmount;      
+    currentBalance = newAmount;  
+
+    const duration = 1000; 
+    let startTime = null;
 
     function animation(currentTime) {
         if (!startTime) startTime = currentTime;
         const progress = Math.min((currentTime - startTime) / duration, 1);
         const currentDisplay = Math.floor(progress * (end - start) + start);
-        const formatted = new Intl.NumberFormat('vi-VN').format(currentDisplay);
-            
-        walletBalance.innerText = `${formatted}đ`;
-            
+        walletBalance.innerText = `${new Intl.NumberFormat('vi-VN').format(currentDisplay)}đ`;
         if (progress < 1) requestAnimationFrame(animation);
-            else currentBalance = end;
         }
-        requestAnimationFrame(animation);
+    requestAnimationFrame(animation);
     }
 
-    function addHistoryEntry(amount) {
-        const historyContainer = document.querySelector('#modal-history .space-y-4');
-        if(!historyContainer) return;
-        const now = new Date();
-        const dateStr = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
-        const formattedAmount = new Intl.NumberFormat('vi-VN').format(amount);
-        const newEntry = document.createElement('div');
-        newEntry.className = "flex justify-between items-center p-5 bg-green-50 rounded-[2rem] border border-green-100 shadow-sm animate-fadeIn";
-        newEntry.innerHTML = `
+    function addHistoryEntry(amount, isLoadPage = false) {
+    const historyContainer = document.getElementById('history-list');
+    if (!historyContainer) return;
+
+    if (historyContainer.querySelector('p')) {
+        historyContainer.innerHTML = '';
+    }
+
+    const now = new Date();
+    const dateStr = `${now.getHours()}:${now.getMinutes()} - ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+    const formattedAmount = new Intl.NumberFormat('vi-VN').format(amount);
+
+    const entryHTML = `
+        <div class="flex justify-between items-center p-5 bg-gray-50 rounded-[2rem] border border-white shadow-sm animate-fadeIn">
             <div>
                 <p class="font-black text-sm">Nạp tiền hệ thống</p>
                 <p class="text-[10px] font-bold text-gray-400">${dateStr}</p>
             </div>
             <div class="flex items-center space-x-4">
                 <p class="text-green-500 font-black">+${formattedAmount}đ</p>
-                <button onclick="printInvoice('Nạp tiền ví EventPay', '${formattedAmount}')" 
-                        class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-pink-500 hover:text-white transition-all">
-                    <i class="fa-solid fa-print text-xs"></i>
+                <button onclick="printInvoice('Nạp tiền ví ElysiumPay', '${formattedAmount}')" 
+                        class="text-gray-400 hover:text-pink-500 transition-colors">
+                    <i class="fa-solid fa-receipt text-lg"></i>
                 </button>
             </div>
-        `;
-        historyContainer.prepend(newEntry);
+        </div>
+    `;
+
+    historyContainer.insertAdjacentHTML('afterbegin', entryHTML);
+    if (!isLoadPage) {
+        let history = JSON.parse(localStorage.getItem('wallet_history')) || [];
+        history.push({ amount, date: dateStr });
+        localStorage.setItem('wallet_history', JSON.stringify(history));
     }
+}
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const walletBalance = document.getElementById('balance-wallet');
+        if (walletBalance) {
+            walletBalance.innerText = `${new Intl.NumberFormat('vi-VN').format(currentBalance)}đ`;
+        }
+        let history = JSON.parse(localStorage.getItem('wallet_history')) || [];
+        history.forEach(item => {
+            addHistoryEntry(item.amount, true); 
+        });
+    });
 
     function processPayment() {
         const amountInput = document.getElementById('nap-tien-input').value;
@@ -165,24 +191,35 @@
     }
 
     function simulateSuccess(event) {
-        const amount = parseInt(document.getElementById('nap-tien-input').value);
-        const btn = event.currentTarget;
-        btn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> ĐANG XÁC THỰC...';
-        btn.disabled = true;
+    const amountInput = document.getElementById('nap-tien-input').value;
+    const amount = parseInt(amountInput);
+    
+    if (!amount || amount < 10000) return alert("Vui lòng nạp tối thiểu 10.000đ!");
 
-        setTimeout(() => {
-            const contentLabel = selectedMethod === 'bank' ? "Nạp tiền qua Ngân hàng" : "Nạp tiền qua Momo";
-            sendDepositToAdmin(amount, contentLabel); 
-            updateBalanceUI(currentBalance + amount);
-            addHistoryEntry(amount);
-            closeModal('modal-nap-tien');
-            
-            btn.innerHTML = 'XÁC NHẬN ĐÃ CHUYỂN'; 
-            btn.disabled = false;
-            backToStep1();
-            alert(`Nạp thành công ${new Intl.NumberFormat('vi-VN').format(amount)}đ!`);
-        }, 1500);
-    }
+    const btn = event.currentTarget;
+    btn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> ĐANG XÁC THỰC...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+        const contentLabel = selectedMethod === 'bank' ? "Nạp tiền qua Ngân hàng" : "Nạp tiền qua Momo";
+        
+        const newTotal = currentBalance + amount;
+        
+        localStorage.setItem('currentBalance', newTotal);
+
+        updateBalanceUI(newTotal); 
+        
+        sendDepositToAdmin(amount, contentLabel); 
+        addHistoryEntry(amount);
+        
+        closeModal('modal-nap-tien');
+        btn.innerHTML = 'XÁC NHẬN ĐÃ CHUYỂN'; 
+        btn.disabled = false;
+        backToStep1();
+        
+        alert(`Nạp thành công ${new Intl.NumberFormat('vi-VN').format(amount)}đ!`);
+    }, 1500);
+}
 
     function sendDepositToAdmin(amount, content) {
         let logs = JSON.parse(localStorage.getItem('admin_deposit_logs')) || [];
@@ -208,8 +245,6 @@
         document.getElementById('nap-tien-step-2').classList.add('hidden');
     }
 
-    // --- 5. LOGIC CẬP NHẬT HỒ SƠ ---
-
     function handleAvatarChange(event) {
         const file = event.target.files[0];
         if (file) {
@@ -225,7 +260,6 @@
         reader.readAsDataURL(file);
     }
 }
-
 
     function updateUserProfile() {
         const newName = document.getElementById('edit-fullname').value;
@@ -623,7 +657,22 @@ Object.assign(window, {
     updateUserProfile, 
     changePassword,    
     handleAvatarChange, 
-    printInvoice: (type, amount) => { }
+    printInvoice: (type, amount) => {
+        const invoiceContent = `
+            ELYSIUM TRANSACTION REPORT
+            --------------------------
+            Giao dịch: ${type}
+            Số tiền: ${amount} VNĐ
+            Thời gian: ${new Date().toLocaleString('vi-VN')}
+            Trạng thái: THÀNH CÔNG
+            --------------------------
+            Cảm ơn bạn đã tin dùng Elysium!
+        `;
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write('<pre style="padding:20px; font-family:monospace;">' + invoiceContent + '</pre>');
+        printWindow.document.close();
+        printWindow.print();
+    }
 });
 
 document.addEventListener('change', (e) => {

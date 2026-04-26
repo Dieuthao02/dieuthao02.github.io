@@ -94,7 +94,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
                     <div class="md:col-span-2 glass-card p-8 rounded-[3rem] relative overflow-hidden shadow-sm border-none">
                         <p class="text-xs font-black text-gray-400 uppercase mb-2">Số dư ví ElysiumPay</p>
-                        <h3 id="balance-dashboard" class="text-4xl font-black text-gray-800">4.250.000 <span class="text-sm">VND</span></h3>
+                        <h3 id="balance-wallet" class="text-4xl font-black text-gray-800">50.000 <span class="text-sm">VND</span></h3>
                         <div class="flex mt-6 space-x-2">
                             <button onclick="openModal('modal-nap-tien')" class="bg-black text-white px-4 py-2 rounded-2xl text-xs font-bold">+ Nạp tiền</button>
                             <button onclick="openModal('modal-history')" class="bg-white px-4 py-2 rounded-2xl text-xs font-bold border border-gray-100 shadow-sm">Lịch sử</button>
@@ -396,7 +396,7 @@
             <p class="text-[10px] font-black text-gray-400 uppercase mb-3 ml-2">Chọn phương thức</p>
             <div class="grid grid-cols-2 gap-3 mb-8">
                 <button onclick="selectMethod('momo')" id="method-momo" class="payment-method flex flex-col items-center justify-center p-4 bg-gray-50 rounded-3xl border-2 border-transparent transition-all">
-                    <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" class="w-8 h-8 mb-2 rounded-lg">
+                    <img src="img/momo.png" class="w-8 h-8 mb-2 rounded-lg">
                     <span class="text-[10px] font-black uppercase">Ví MoMo</span>
                 </button>
                 <button onclick="selectMethod('bank')" id="method-bank" class="payment-method flex flex-col items-center justify-center p-4 bg-gray-50 rounded-3xl border-2 border-transparent transition-all">
@@ -435,23 +435,16 @@
     <div class="bg-white rounded-[3rem] p-10 max-w-lg w-full max-h-[80vh] overflow-y-auto no-scrollbar" onclick="event.stopPropagation()">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-2xl font-black uppercase italic">Giao dịch gần đây</h3>
-            <!-- NÚT IN TỔNG HỢP -->
-            <button onclick="printInvoice('Tất cả giao dịch', currentBalance)" class="text-pink-500 hover:text-pink-700">
+            <button onclick="printInvoice('Tất cả giao dịch', currentBalance.toLocaleString('vi-VN'))" class="text-pink-500 hover:text-pink-700">
                 <i class="fa-solid fa-print text-xl"></i>
             </button>
         </div>
+
         <div id="history-list" class="space-y-4">
-            <div class="flex justify-between items-center p-5 bg-gray-50 rounded-[2rem] border border-white shadow-sm">
-                <div>
-                    <p class="font-black text-sm">Nạp tiền hệ thống</p>
-                    <p class="text-[10px] font-bold text-gray-400">Giao dịch mẫu</p>
-                </div>
-                <button onclick="printInvoice('Nạp tiền hệ thống', '500.000')" class="ml-4 text-gray-400 hover:text-black">
-                    <i class="fa-solid fa-receipt"></i>
-                </button>
-            </div>
+            <p class="text-center text-gray-400 text-xs font-bold py-10 opacity-50">Chưa có giao dịch nào gần đây</p>
         </div>
-        <button onclick="closeModal('modal-history')" class="w-full mt-6 py-4 font-black text-xs uppercase text-gray-400">Quay lại</button>
+
+        <button onclick="closeModal('modal-history')" class="w-full mt-6 py-4 font-black text-xs uppercase text-gray-400 hover:text-black transition-colors">Quay lại</button>
     </div>
 </div>
 
