@@ -2497,7 +2497,7 @@ function loadRefundData() {
     const adminDisplay = document.getElementById('admin-balance-display');
     if (!tbody) return;
 
-    const adminBalance = parseInt(localStorage.getItem('admin_source_money')) || 0;
+    const adminBalance = parseInt(localStorage.getItem('admin_source_money')) || 1000000000;
     if (adminDisplay) adminDisplay.innerText = adminBalance.toLocaleString();
 
     let allOrders = JSON.parse(localStorage.getItem('eventOrders')) || [];
