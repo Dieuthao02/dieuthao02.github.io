@@ -684,3 +684,50 @@ document.addEventListener('change', (e) => {
 document.addEventListener('click', () => dropdownMenu.classList.remove('active'));
 
 renderMyTickets();
+
+ // Đọc query param ?tab= từ URL và điều hướng đúng trang/modal
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get('tab');
+
+        if (!tab) return;
+
+        // Chờ DOM + JS dashboard load xong rồi mới kích hoạt
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                if (tab === 'topup') {
+                    // Mở modal nạp tiền
+                    if (typeof openModal === 'function') {
+                        openModal('modal-nap-tien');
+                    } else {
+                        // Fallback nếu openModal chưa sẵn sàng
+                        const modal = document.getElementById('modal-nap-tien');
+                        if (modal) modal.classList.add('active');
+                    }
+                } else if (tab === 'tickets') {
+                    // Chuyển sang trang Kho vé
+                    const ticketsBtn = document.querySelector('[onclick="showPage(\'tickets\', this)"]');
+                    if (ticketsBtn) {
+                        ticketsBtn.click();
+                    } else if (typeof showPage === 'function') {
+                        showPage('tickets', null);
+                    }
+                } else if (tab === 'profile') {
+                    const profileBtn = document.querySelector('[onclick="showPage(\'profile\')"]') ||
+                                       document.querySelector('[onclick*="showPage(\'profile\'"]');
+                    if (profileBtn) {
+                        profileBtn.click();
+                    } else if (typeof showPage === 'function') {
+                        showPage('profile', null);
+                    }
+                } else if (tab === 'refund') {
+                    const refundBtn = document.querySelector('[onclick="showPage(\'refund-page\', this)"]');
+                    if (refundBtn) {
+                        refundBtn.click();
+                    } else if (typeof showPage === 'function') {
+                        showPage('refund-page', null);
+                    }
+                }
+            }, 300); // delay nhỏ để đảm bảo dashboard.js đã khởi tạo xong
+        });
+    })();

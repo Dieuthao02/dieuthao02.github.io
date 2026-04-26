@@ -72,6 +72,7 @@ async function fetchEventsFromSheet() {
                     let isSoldOutAll = false;
                     allExpandedEvents.push({
                         id: ev.id ? `${ev.id}-${d}` : `sheet-${index}-${d}`, 
+                        realId: ev.id || `sheet-${index}`,
                         name: ev.eventName || "Sự kiện không tên",
                         date: formattedDate,
                         time: eventTime,
@@ -192,7 +193,7 @@ window.showEvents = (dateStr) => {
                 <p class="text-xs text-gray-500 mt-3 flex items-center font-bold">
                     <i class="fa-solid fa-location-dot mr-2 text-blue-500"></i> ${e.loc}
                 </p>
-                <button onclick="${isPast ? '' : `handleBooking('${e.id}')`}" 
+                <button onclick="${isPast ? '' : `handleBooking('${e.realId}')`}" 
                     class="w-full mt-6 py-4 ${btnClass} text-white rounded-2xl text-xs font-black tracking-widest uppercase transform transition-all shadow-xl">
                     ${btnText}
                 </button>

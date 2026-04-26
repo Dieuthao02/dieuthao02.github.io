@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+    body { 
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+        background-color: #ffffff; 
+        scroll-behavior: smooth; 
+        margin: 0; 
+    }
+
+
+    .no-scrollbar::-webkit-scrollbar { 
+        display: none; 
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none; 
+        scrollbar-width: none; 
+    }
+
+    .text-gradient { 
+        background: linear-gradient(to right, #3b82f6, #ec4899); 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+    }
+    
+
+    .modal-overlay { 
+        display: none; 
+        position: fixed; 
+        inset: 0; 
+        z-index: 1000; 
+        background: rgba(0,0,0,0.85); 
+        backdrop-filter: blur(15px); 
+        align-items: center; 
+        justify-content: center; 
+        padding: 20px; 
+        opacity: 0; 
+    }
+
+    .modal-overlay.active { 
+        display: flex; 
+        animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+    }
+
+    @keyframes fadeIn { 
+        from { opacity: 0; transform: scale(0.95); } 
+        to { opacity: 1; transform: scale(1); } 
+    }
+    
+
+    .card-hover { 
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        cursor: pointer; 
+        will-change: transform; 
+    }
+
+    .card-hover:hover { 
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .carousel-section {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        overflow: hidden; 
+        padding: 80px 0 120px 0;
+        cursor: grab;
+        perspective: 2500px; 
+    }
+    .carousel-section:active {
+        cursor: grabbing;
+    }
+
+    .team-slider {
+        position: relative;
+        width: 160px; 
+        height: 220px; 
+        transform-style: preserve-3d;
+        transform: rotateX(0deg) rotateY(0deg);
+        transition: transform 0.1s ease-out; 
+    }
+
+    .team-item {
+        position: absolute;
+        inset: 0;
+        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) 
+                   translateZ(500px); 
+        backface-visibility: hidden;
+        user-select: none;
+        -webkit-user-drag: none;
+    }
+    
+    .team-item .card-hover {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: white;
+        border-radius: 1.5rem;
+        padding: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
