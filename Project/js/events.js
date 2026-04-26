@@ -28,7 +28,6 @@ async function fetchEvents() {
             }
 
             if (!isPastA && !isPastB) {
-                // Ưu tiên HOT lên trước
                 if (isHotA !== isHotB) {
                     return isHotA ? -1 : 1;
                 }
@@ -75,7 +74,6 @@ function renderEvents(events) {
     const grid = document.getElementById('eventGrid');
     if (!grid) return;
     grid.innerHTML = ''; 
-   
 
     events.forEach(event => {
         const id = event.id;
@@ -101,13 +99,13 @@ function renderEvents(events) {
                     ${isHot ? '<span class="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded">HOT</span>' : ''}
                 </div>
                 <div class="p-5 flex-grow flex flex-col">
-                    <h3 class="font-bold text-gray-900 text-lg mb-2 line-clamp-2 h-14">${name}</h3>
+                    <h3 class="font-semibold text-gray-900 text-base mb-1 line-clamp-2">${name}</h3>
                     <div class="text-sm text-gray-500 space-y-2 mb-4">
                         <p class="flex items-start"><i class="fa-regular fa-calendar-check mt-1 mr-2"></i><span>${time}</span></p>
                         <p class="flex items-start"><i class="fa-solid fa-location-dot mt-1 mr-2"></i><span>${loc}</span></p>
                     </div>
                     <div class="mt-auto flex justify-between items-center border-t pt-4">
-                        <span class="text-red-500 font-bold text-lg">${displayPrice}</span>
+                        <span class="font-bold text-lg bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">${displayPrice}</span>
                         <button onclick="event.stopPropagation(); goToDetail('${event.id}')" 
                         class="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg font-semibold text-sm hover:bg-blue-600 hover:text-white transition-colors">
                     Mua vé
@@ -185,8 +183,8 @@ function filterByLocationFromUrl(locationName) {
 }
 
 function btnApplyDate() {
-    applyDateFilter(); // Gọi hàm lọc thực tế
-    toggleDropdown('dropdownDate'); // Đóng bảng lịch sau khi chọn
+    applyDateFilter(); 
+    toggleDropdown('dropdownDate'); 
 }
 
 function updateActiveButton(activeBtn) {
@@ -217,7 +215,6 @@ searchInput.addEventListener('input', function() {
     
     if (q.length > 0) {
         trendingSection.classList.add('hidden');
-        // Tìm kiếm trong mảng allEvents thực tế
         const matches = allEvents.filter(e => 
             e.eventName.toLowerCase().includes(q) || 
             e.location.toLowerCase().includes(q)
@@ -253,7 +250,6 @@ function toggleDropdown(id) {
     const target = document.getElementById(id);
     if (!target) return;
     
-    // Đóng các dropdown khác trước
     document.querySelectorAll('.dropdown-content').forEach(d => {
         if (d.id !== id) d.classList.add('hidden');
     });
@@ -295,40 +291,20 @@ function resetAllFilters() {
 }
 
 window.addEventListener('click', function(e) {
-    if (!e.target.closest('.relative')) {
-        document.getElementById('dropdownDate').classList.add('hidden');
-        document.getElementById('dropdownMain').classList.add('hidden');
-    }
+    const dropdownDate = document.getElementById('dropdownDate');
+    const dropdownMain = document.getElementById('dropdownMain');
+    const insideDateDropdown = dropdownDate && dropdownDate.contains(e.target);
+    const insideMainDropdown = dropdownMain && dropdownMain.contains(e.target);
+    const isToggleBtn = e.target.closest('button[onclick*="toggleDropdown"]');
+    
+    if (!insideDateDropdown && !isToggleBtn) dropdownDate && dropdownDate.classList.add('hidden');
+    if (!insideMainDropdown && !isToggleBtn) dropdownMain && dropdownMain.classList.add('hidden');
 });
 
-function initCalendar() {
-    const container = document.getElementById('calendarContainer');
-    if (!container) return;
-
-    // Khởi tạo flatpickr
-    datePicker = flatpickr("#dateRangeInput", {
-        mode: "range",
-        inline: true, // Hiển thị lịch ngay lập tức
-        dateFormat: "d/m/Y",
-        locale: "vn", // Nếu bạn muốn tiếng Việt (cần nạp thêm script locale)
-        onChange: function(dates, dateStr) {
-            selectedDates = dates;
-            // Cập nhật text cho nhãn hiển thị
-            const dateLabel = document.getElementById('dateLabel');
-            if (dateLabel) dateLabel.textContent = dateStr || 'Tất cả các ngày';
-            
-            // Gọi hàm lọc dữ liệu
-            applyDateFilter();
-        }
-    });
-}
-
-window.onload = initCalendar;
 
 function applyDateFilter() {
     const dateLabel = document.getElementById('dateLabel');
     
-    // Nếu không chọn ngày hoặc xóa lựa chọn, hiện tất cả sự kiện
     if (!selectedDates || selectedDates.length === 0) {
         renderEvents(allEvents);
         if (dateLabel) dateLabel.innerText = 'Tất cả các ngày';
@@ -338,20 +314,17 @@ function applyDateFilter() {
     const startDate = new Date(selectedDates[0]);
     startDate.setHours(0, 0, 0, 0);
     
-    // Nếu chọn dải ngày thì lấy ngày kết thúc, nếu chọn 1 ngày thì dùng luôn ngày đó
     const endDate = selectedDates[1] ? new Date(selectedDates[1]) : new Date(selectedDates[0]);
     endDate.setHours(23, 59, 59, 999);
 
     const filtered = allEvents.filter(event => {
         const eventDate = parseDate(event.time); 
         if (!eventDate) return false;
-        // Kiểm tra xem ngày của sự kiện có nằm trong khoảng đã chọn không
         return eventDate >= startDate && eventDate <= endDate;
     });
 
     renderEvents(filtered);
 
-    // Cập nhật text hiển thị trên nút bấm
     if (dateLabel) {
         const label = selectedDates.length === 2 
             ? `${flatpickr.formatDate(startDate, "d/m")} - ${flatpickr.formatDate(endDate, "d/m")}`
@@ -363,22 +336,17 @@ function applyDateFilter() {
 function parseDate(dateStr) {
     if (!dateStr) return null;
     
-    // Làm sạch chuỗi: xóa khoảng trắng thừa, chuyển về chữ thường
     const cleanStr = dateStr.toString().trim().toLowerCase();
-
-    // 1. Định dạng "24 tháng 04, 2026" hoặc "24 thg 4, 2026"
     const monthTextMatch = cleanStr.match(/(\d{1,2})\s+(?:tháng|thg)\s+(\d{1,2})[,\s/]+(\d{4})/i);
     if (monthTextMatch) {
         return new Date(parseInt(monthTextMatch[3]), parseInt(monthTextMatch[2]) - 1, parseInt(monthTextMatch[1]));
     }
 
-    // 2. Định dạng "24/04/2026" hoặc "24-04-2026"
     const slashMatch = cleanStr.match(/(\d{1,2})[/-](\d{1,2})[/-](\d{4})/);
     if (slashMatch) {
         return new Date(parseInt(slashMatch[3]), parseInt(slashMatch[2]) - 1, parseInt(slashMatch[1]));
     }
 
-    // 3. Định dạng ISO chuẩn
     const isoDate = new Date(dateStr);
     if (!isNaN(isoDate.getTime())) {
         return isoDate;
@@ -402,21 +370,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    flatpickr("#dateRangeInput", {
-        mode: "range",
-        inline: true, // Hiển thị lịch luôn mà không cần click vào input
-        appendTo: document.getElementById('calendarContainer'),
-        dateFormat: "d/m/Y",
-        onChange: function(selectedDates, dateStr) {
-            // Cập nhật text cho nút bấm khi chọn ngày
-            document.getElementById('dateLabel').textContent = dateStr;
-        }
-    });
-});
-
 function renderSearchSuggestions() {
-    // Lấy 3 sự kiện HOT từ dữ liệu thực tế
     const hotItems = allEvents.filter(e => e.hasDiagram === "TRUE" || e.hasDiagram === true).slice(0, 3);
     const grid = document.getElementById('search-suggestions-grid');
     if (!grid || hotItems.length === 0) return;
@@ -444,8 +398,15 @@ function renderSearchSuggestions() {
 // ===== SEARCH TABS =====
 function switchSearchTab(tab) {
     const isGenre = tab === 'genre';
-    document.getElementById('tab-genre').className = `pb-2 text-sm font-black border-b-2 transition ${isGenre ? 'text-white border-white' : 'text-gray-400 border-transparent hover:text-white'}`;
-    document.getElementById('tab-city').className  = `pb-2 text-sm font-black border-b-2 transition ${!isGenre ? 'text-white border-white' : 'text-gray-400 border-transparent hover:text-white'}`;
+    const activeTab = document.getElementById(isGenre ? 'tab-genre' : 'tab-city');
+    const inactiveTab = document.getElementById(isGenre ? 'tab-city' : 'tab-genre');
+
+    activeTab.classList.remove('text-white/60', 'text-gray-400', 'border-transparent');
+    activeTab.classList.add('text-white', 'border-white');
+
+    inactiveTab.classList.remove('text-white', 'border-white');
+    inactiveTab.classList.add('text-white/60', 'border-transparent');
+
     document.getElementById('panel-genre').classList.toggle('hidden', !isGenre);
     document.getElementById('panel-city').classList.toggle('hidden', isGenre);
 }
@@ -469,17 +430,14 @@ document.querySelectorAll('.location-option').forEach(opt => {
 });
 document.addEventListener('click', () => locationDropdown.classList.add('hidden'));
 
-// ===== LIVE SEARCH (Dùng dữ liệu thật từ Google Sheets) =====
 if (searchInput) {
     searchInput.addEventListener('input', function() {
         const q = this.value.trim().toLowerCase();
-        // Lấy đúng các phần tử giao diện
         const trendingSection = document.getElementById('trending-list').parentElement;
         const liveResults = document.getElementById('live-results');
-        const discoveryTabs = document.querySelector('.px-5.pt-4'); // Khu vực tabs khám phá
+        const discoveryTabs = document.querySelector('.px-5.pt-4'); 
 
         if (q.length > 0) {
-            // Ẩn các phần không liên quan khi đang gõ
             if (trendingSection) trendingSection.classList.add('hidden');
             if (discoveryTabs) discoveryTabs.classList.add('hidden');
             
@@ -510,7 +468,6 @@ if (searchInput) {
                 liveResults.innerHTML = '<div class="text-gray-400 text-sm text-center py-3">Không tìm thấy kết quả nào</div>';
             }
         } else {
-            // Hiện lại các phần ban đầu khi xóa trắng ô search
             if (trendingSection) trendingSection.classList.remove('hidden');
             if (discoveryTabs) discoveryTabs.classList.remove('hidden');
             liveResults.classList.add('hidden');
@@ -519,27 +476,23 @@ if (searchInput) {
 }
 
 if (searchInput && suggestions) {
-    // 1. Hiện bảng khi focus hoặc click vào input
     searchInput.addEventListener('focus', (e) => {
         suggestions.classList.remove('hidden');
         console.log("Đã mở bảng search");
     });
 
-    // 2. Click ra ngoài để đóng bảng
     document.addEventListener('click', (e) => {
-        // Kiểm tra nếu click KHÔNG nằm trong searchInput và KHÔNG nằm trong bảng gợi ý
         if (!searchInput.contains(e.target) && !suggestions.contains(e.target)) {
             suggestions.classList.add('hidden');
         }
     });
 
-    // Ngăn việc click bên trong bảng gợi ý làm bảng bị đóng
+    
     suggestions.addEventListener('click', (e) => {
         e.stopPropagation();
     });
 }
 
-// 3. Xử lý logic search khi gõ (Input Event)
 if (searchInput) {
     searchInput.addEventListener('input', function() {
         const q = this.value.trim().toLowerCase();
@@ -582,3 +535,58 @@ if (searchInput) {
         }
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarContainer = document.getElementById('calendarContainer');
+    if (!calendarContainer) return;
+    datePicker = flatpickr("#dateRangeInput", {
+        mode: "range",
+        inline: true,
+        static: true,
+        dateFormat: "d/m/Y",
+        disableMobile: true,
+        onChange: function(dates, dateStr) {
+            selectedDates = dates;
+            const dateLabel = document.getElementById('dateLabel');
+            if (dateLabel) {
+                if (dates.length === 2) {
+                    const fmt = d => `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+                    dateLabel.textContent = `${fmt(dates[0])} - ${fmt(dates[1])}`;
+                } else if (dates.length === 1) {
+                    const fmt = d => `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+                    dateLabel.textContent = fmt(dates[0]);
+                }
+            }
+        }
+    });
+
+    const fpCal = document.querySelector('.flatpickr-calendar');
+    if (fpCal && calendarContainer) {
+        calendarContainer.appendChild(fpCal);
+    }
+});
+
+function resetDatePicker() {
+    if (datePicker) datePicker.clear();
+    selectedDates = [];
+    const dateLabel = document.getElementById('dateLabel');
+    if (dateLabel) dateLabel.textContent = 'Tất cả các ngày';
+    renderEvents(allEvents);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createBtn = document.getElementById('create-event-btn');
+    if (!createBtn) return;
+
+    const user = localStorage.getItem('user');
+
+    if (!user) {
+     
+        createBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+        createBtn.href = "#";
+    } else {
+    
+        createBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+        createBtn.href = "create.html";
+    }
+});

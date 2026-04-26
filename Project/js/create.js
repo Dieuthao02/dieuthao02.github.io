@@ -85,6 +85,7 @@ function goToStep(stepNumber) {
         let firstInvalidField = null;
         let isValid = true;
 
+        // 1. Quét các ô bắt buộc 
         const requiredFields = currentStep.querySelectorAll('input[required], select[required], textarea[required]');
         
         requiredFields.forEach(field => {
@@ -130,6 +131,7 @@ function goToStep(stepNumber) {
         }
     }
 
+    // --- PHẦN CHUYỂN BƯỚC ---
     document.querySelectorAll('.step-content').forEach(content => content.classList.add('hidden'));
     const targetStep = document.getElementById(`create-step-${stepNumber}`);
     if (targetStep) targetStep.classList.remove('hidden');
@@ -258,10 +260,11 @@ async function finishCreateEvent(isDraft = false) {
             return (imgEl && imgEl.src && imgEl.src.startsWith('data:image')) ? imgEl.src : "";
         };
 
+        // Gom dữ liệu sự kiện
         const newEvent = {
             id: (isEditing && currentEditCard) ? currentEditCard.dataset.id : 'ev-' + Date.now(),
             title: rawName,
-            // Media
+            // Bước 1 & 2: Media
             img: getBase64FromImg('poster-prev'),       
             banner: getBase64FromImg('cover-prev'),     
             type: document.getElementById('event-type-input')?.value || "",
@@ -293,7 +296,7 @@ async function finishCreateEvent(isDraft = false) {
             
             map: getBase64FromImg('map-prev'), 
 
-            // Pháp lý
+            // Bước 3: Pháp lý
             orgType: document.querySelector('input[name="org-type"]:checked')?.value || "", 
             taxId: document.getElementById('tax-id-input')?.value.trim() || "",
             legalId: document.getElementById('legal-id-input')?.value.trim() || "",
@@ -302,7 +305,7 @@ async function finishCreateEvent(isDraft = false) {
             compensation: document.getElementById('det-compensation')?.value || "",
             legalFilesLink: legalFilesLink,
         
-            // Tài khoản
+            // Bước 4: Tài khoản
             bankname: document.getElementById('bank-name')?.value.trim() || "",
             bankuser: document.getElementById('bank-user')?.value.trim() || "",
             bankacc: document.getElementById('bank-acc')?.value.trim() || "",
@@ -314,6 +317,7 @@ async function finishCreateEvent(isDraft = false) {
             timeCreate: new Date().toLocaleString()
         };
 
+        // Lưu vào LocalStorage
         let allData = JSON.parse(localStorage.getItem('ticket_events')) || [];
         if (isEditing && currentEditCard) {
             const index = allData.findIndex(ev => ev.id === newEvent.id);

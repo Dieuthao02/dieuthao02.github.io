@@ -6,7 +6,7 @@
     currentEventId = urlParams.get('id');
 
     const videoMap = {
-        '152': '.../video/video152.mp4'
+        '151': 'video/video151.mp4'
     };
 
     const specialLoader = document.getElementById('special-loader');
@@ -82,6 +82,50 @@
     const bgImage = document.getElementById('dynamic-bg-image');
     
     const eventIdStr = String(ev.id);
+
+    const setActiveCategory = (categoryText) => {
+        const navLinks = document.querySelectorAll('.category-nav-pastel a');
+        if (!navLinks.length || !categoryText) return;
+
+        const normalizedCategory = categoryText.trim().toLowerCase();
+        let matched = false;
+
+        navLinks.forEach(link => {
+            const linkText = link.textContent.trim().toLowerCase();
+            const isSame = linkText === normalizedCategory;
+            const isRelated = (
+                (linkText === 'nhạc sống' && normalizedCategory.includes('nhạc')) ||
+                (linkText === 'sân khấu & nghệ thuật' && (normalizedCategory.includes('sân khấu') || normalizedCategory.includes('nghệ thuật'))) ||
+                (linkText === 'thể thao' && normalizedCategory.includes('thể thao')) ||
+                (linkText === 'hội thảo & workshop' && normalizedCategory.includes('hội thảo')) ||
+                (linkText === 'tham quan & trải nghiệm' && (normalizedCategory.includes('tham quan') || normalizedCategory.includes('trải nghiệm')))
+            );
+
+            if (isSame || isRelated) {
+                link.classList.add('text-pink-600', 'font-black');
+                link.classList.remove('text-gray-500', 'hover:text-pink-400');
+                matched = true;
+            } else {
+                link.classList.remove('text-pink-600', 'font-black');
+                link.classList.add('text-gray-500', 'font-bold');
+            }
+        });
+
+        if (!matched) {
+            const navWrapper = document.querySelector('.category-nav-pastel .flex');
+            if (navWrapper) {
+                const customLink = document.createElement('a');
+                customLink.href = '#';
+                customLink.textContent = categoryText;
+                customLink.className = 'text-pink-600 font-black text-xs uppercase';
+                navWrapper.insertBefore(customLink, navWrapper.firstChild);
+            }
+        }
+    };
+
+    if (ev.category) {
+        setActiveCategory(ev.category);
+    }
 
     if (bgVideoMap[eventIdStr]) {
         bgVideo.src = bgVideoMap[eventIdStr];
@@ -294,7 +338,7 @@
         if (priceDisplay) priceDisplay.innerHTML = `<span class="line-through opacity-50">${finalMinDisplay} đ</span>`;
     } else {
         if (bookingBtn) {
-    
+            // KIỂM TRA SỐ LƯỢNG LỊCH DIỄN
             if (timeArray.length === 1) {
                 bookingBtn.innerHTML = "Mua vé ngay";
                 bookingBtn.onclick = () => goToBooking(timeArray[0]);
@@ -318,6 +362,7 @@
         if (priceDisplay) priceDisplay.innerHTML = `${finalMinDisplay} `;
     }
 
+    // --- 7. TỔ CHỨC ---
     document.getElementById('org-name').innerText = ev.organizerName || "EventHub Partner";
     document.getElementById('org-desc').innerText = ev.organizerDesc || "Đơn vị tổ chức chuyên nghiệp.";
     const orgLogoContainer = document.getElementById('org-logo');
@@ -380,4 +425,35 @@
     window.location.href = url;
 }
 
-        window.onload = initEventDetail;
+    window.onload = initEventDetail;
+    document.addEventListener('DOMContentLoaded', function() {
+    const filters = document.querySelectorAll('.category-filter');
+    const cards = document.querySelectorAll('.suggestion-card');
+
+    filters.forEach(filter => {
+        filter.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            filters.forEach(f => {
+                f.classList.remove('text-pink-600', 'active');
+                f.classList.add('text-gray-500');
+            });
+            this.classList.add('text-pink-600', 'active');
+            this.classList.remove('text-gray-500');
+
+            const filterValue = this.getAttribute('data-filter');
+
+            cards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                
+                if (filterValue === 'all' || cardCategory === filterValue) {
+                    card.style.display = 'block';
+                    card.classList.add('animate-in', 'fade-in', 'duration-500');
+                } else {
+                    card.style.display = 'none';
+                    card.classList.remove('animate-in', 'fade-in');
+                }
+            });
+        });
+    });
+});
