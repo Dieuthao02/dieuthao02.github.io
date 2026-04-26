@@ -1357,7 +1357,7 @@ function addLiveOrder(name, event, price = 0, isReplay = false, orderObj = {}) {
             </td>
             <td class="p-6">
                 <p class="font-black text-white text-sm">${name}</p>
-                <p class="text-[10px] text-gray-500">${name.toLowerCase().replace(/\s/g, '')}@gmail.com</p>
+                <p class="text-[10px] text-gray-500">${orderObj.email || name.toLowerCase().replace(/\s/g, '') + '@gmail.com'}</p>
             </td>
             <td class="p-6 text-xs text-gray-300 italic">${event}</td>
             <td class="p-6 text-center">
@@ -1412,7 +1412,7 @@ function renderOrderRow(orderObj) {
             </td>
             <td class="p-6">
                 <p class="font-black text-white text-sm">${orderObj.name || orderObj.customer}</p>
-                <p class="text-[10px] text-gray-500">${(orderObj.name || "khach").toLowerCase().replace(/\s/g, '')}@gmail.com</p>
+                <p class="text-[10px] text-gray-500">${orderObj.email || (orderObj.name || "khach").toLowerCase().replace(/\s/g, '') + '@gmail.com'}</p>
             </td>
             <td class="p-6 text-xs text-gray-300 italic">${orderObj.event}</td>
             <td class="p-6 text-center"><span class="bg-white/5 px-3 py-1 rounded-md text-xs font-bold">01</span></td>
