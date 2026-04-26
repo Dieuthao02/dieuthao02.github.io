@@ -1013,6 +1013,22 @@ function finishPayment() {
 
         if (!config) throw new Error("Không tìm thấy thông tin sự kiện để lưu đơn!");
 
+        const totalStr = document.getElementById('pay-total') ? document.getElementById('pay-total').innerText : "0đ";
+        const totalAmount = parseInt(totalStr.replace(/[^\d]/g, ''));
+
+        if (currentMethod === 'ElysiumPay') {
+            let currentBalance = parseInt(localStorage.getItem('currentBalance')) || 0;
+
+            if (currentBalance < totalAmount) {
+                showError(`Số dư ví không đủ! Bạn còn ${new Intl.NumberFormat('vi-VN').format(currentBalance)}đ`);
+                return; 
+            }
+
+            currentBalance -= totalAmount;
+            localStorage.setItem('currentBalance', currentBalance);
+            console.log("Đã trừ tiền ví. Số dư mới:", currentBalance);
+        }
+
         const inputs = document.querySelectorAll('#step-2 .q-input');
         const now = new Date();
         const orderId = "TK-" + Math.floor(Math.random() * 90000 + 10000);
@@ -1027,6 +1043,7 @@ function finishPayment() {
             eventTime: config.time,
             tickets: [...cart], 
             total: document.getElementById('pay-total') ? document.getElementById('pay-total').innerText : "0đ",
+            method: currentMethod,
             time: now.toLocaleString('vi-VN'),
             status: "Thành công"
             ,createdAt: now.getTime()
@@ -1050,11 +1067,9 @@ function finishPayment() {
     }
 }
 
-// Khởi chạy khi trang tải xong
 window.onload = function() {
     initMap();
 };
-
 
 // --- HÀM THÔNG BÁO LỖI  ---
 function showError(msg) {
@@ -1119,13 +1134,13 @@ function changeModalQty(delta) {
 }
 
 function addTicketToCart() {
-    // 1. Kiểm tra giới hạn
+ 
     const currentTotalQty = cart.reduce((sum, item) => sum + item.qty, 0);
     if (currentTotalQty + tempSelection.qty > 10) {
         showError("Mỗi người chỉ được mua tối đa 10 vé thôi bà ơi!");
         return;
     }
-    // 2. Kiểm tra tồn kho
+
     const ticketInConfig = currentEventConfig.priceList.find(p => p.name === tempSelection.name);
     if (ticketInConfig && tempSelection.qty > ticketInConfig.stock) {
         showError(`Rất tiếc, hạng vé này chỉ còn lại ${ticketInConfig.stock} vé thôi!`);
@@ -1245,7 +1260,6 @@ function goToStep2() {
         step2Title.innerText = config.eventName; 
     }
 
-    // Chuyển màn hình
     document.getElementById('step-1').classList.add('hidden');
     document.getElementById('step-2').classList.remove('hidden');
     
@@ -1289,7 +1303,6 @@ function confirmCancelOrder() {
 
 // --- THANH TOÁN ---
 function selectPay(element) {
-    // Xóa active cũ
     document.querySelectorAll('.pay-method').forEach(el => {
         el.classList.remove('active');
         const check = el.querySelector('.fa-circle-check');
@@ -1370,12 +1383,10 @@ function setupQRModal(method) {
         modal.classList.remove('hidden');
         modal.style.setProperty('display', 'flex', 'important');
         
-        // 1. Lấy số tiền
         const rawAmount = document.getElementById('pay-total').innerText.replace(/\D/g, '');
         const amount = parseInt(rawAmount) || 0;
         amountDisplay.innerText = amount.toLocaleString() + " đ";
         
-        // 2. Tạo nội dung chuyển khoản ngẫu nhiên
         const orderInfo = "TKB" + Math.floor(100000 + Math.random() * 899999);
         if(bankContent) bankContent.innerText = orderInfo;
 
@@ -1433,7 +1444,6 @@ function copyText(text) {
     });
 }
 
-// Hàm đổi Tab
 function switchTab(type) {
     const tabQr = document.getElementById('tab-qr');
     const tabBank = document.getElementById('tab-bank');

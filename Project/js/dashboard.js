@@ -125,27 +125,39 @@
     requestAnimationFrame(animation);
     }
 
-    function addHistoryEntry(amount, isLoadPage = false) {
+    
+    function addHistoryEntry(amount, isLoadPage = false, type = 'deposit', description = 'Nạp tiền hệ thống') {
     const historyContainer = document.getElementById('history-list');
     if (!historyContainer) return;
 
-    if (historyContainer.querySelector('p')) {
+    const emptyMsg = historyContainer.querySelector('p.opacity-50');
+    if (emptyMsg) {
         historyContainer.innerHTML = '';
     }
 
     const now = new Date();
-    const dateStr = `${now.getHours()}:${now.getMinutes()} - ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+    const dateStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} - ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
     const formattedAmount = new Intl.NumberFormat('vi-VN').format(amount);
+    
+    const isDeposit = type === 'deposit';
+    const colorClass = isDeposit ? 'text-green-500' : 'text-red-500';
+    const symbol = isDeposit ? '+' : '-';
+    const iconClass = isDeposit ? 'fa-square-plus' : 'fa-ticket-simple'; 
 
     const entryHTML = `
-        <div class="flex justify-between items-center p-5 bg-gray-50 rounded-[2rem] border border-white shadow-sm animate-fadeIn">
-            <div>
-                <p class="font-black text-sm">Nạp tiền hệ thống</p>
-                <p class="text-[10px] font-bold text-gray-400">${dateStr}</p>
+        <div class="flex justify-between items-center p-5 bg-gray-50 rounded-[2rem] border border-white shadow-sm animate-fadeIn mb-3">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm ${colorClass}">
+                    <i class="fa-solid ${iconClass}"></i>
+                </div>
+                <div>
+                    <p class="font-black text-sm">${description}</p>
+                    <p class="text-[10px] font-bold text-gray-400">${dateStr}</p>
+                </div>
             </div>
             <div class="flex items-center space-x-4">
-                <p class="text-green-500 font-black">+${formattedAmount}đ</p>
-                <button onclick="printInvoice('Nạp tiền ví ElysiumPay', '${formattedAmount}')" 
+                <p class="${colorClass} font-black">${symbol}${formattedAmount}đ</p>
+                <button onclick="printInvoice('${description}', '${formattedAmount}')" 
                         class="text-gray-400 hover:text-pink-500 transition-colors">
                     <i class="fa-solid fa-receipt text-lg"></i>
                 </button>
@@ -154,12 +166,19 @@
     `;
 
     historyContainer.insertAdjacentHTML('afterbegin', entryHTML);
+
     if (!isLoadPage) {
         let history = JSON.parse(localStorage.getItem('wallet_history')) || [];
-        history.push({ amount, date: dateStr });
+        history.push({ 
+            amount, 
+            date: dateStr, 
+            type: type, 
+            description: description 
+        });
         localStorage.setItem('wallet_history', JSON.stringify(history));
     }
 }
+    window.addHistoryEntry = addHistoryEntry;
 
     document.addEventListener('DOMContentLoaded', () => {
         const walletBalance = document.getElementById('balance-wallet');
@@ -168,7 +187,7 @@
         }
         let history = JSON.parse(localStorage.getItem('wallet_history')) || [];
         history.forEach(item => {
-            addHistoryEntry(item.amount, true); 
+            addHistoryEntry(item.amount, true, item.type || 'deposit', item.description || 'Nạp tiền hệ thống'); 
         });
     });
 
@@ -726,3 +745,62 @@ renderMyTickets();
             }, 300); 
         });
     })();
+
+function saveToHistory(amount, type, description) {
+    const now = new Date();
+    const dateStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} - ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+    
+    let history = JSON.parse(localStorage.getItem('wallet_history')) || [];
+    
+    const isDuplicate = history.some(item => item.description === description && item.amount === amount);
+    if (isDuplicate) return;
+
+    history.push({ 
+        amount, 
+        date: dateStr, 
+        type: type, 
+        description: description 
+    });
+    localStorage.setItem('wallet_history', JSON.stringify(history));
+}
+
+window.addEventListener('storage', (e) => {
+    if (e.key === 'currentBalance') {
+        const newBalance = parseInt(e.newValue) || 0;
+        if (typeof updateBalanceUI === 'function') updateBalanceUI(newBalance);
+    }
+
+    if (e.key === 'eventOrders') {
+        const orders = JSON.parse(e.newValue) || [];
+        if (orders.length > 0) {
+            const last = orders[orders.length - 1];
+            if (last.method === 'ElysiumPay') {
+                const amount = parseInt(last.total.replace(/[^\d]/g, ''));
+                const desc = `Thanh toán vé: ${last.event}`;
+                
+                addHistoryEntry(amount, false, 'payment', desc);
+                saveToHistory(amount, 'payment', desc);
+            }
+        }
+    }
+});
+
+window.addEventListener('storage_updated', () => {
+    const freshBalance = parseInt(localStorage.getItem('currentBalance')) || 0;
+    if (typeof updateBalanceUI === 'function') updateBalanceUI(freshBalance);
+
+    const orders = JSON.parse(localStorage.getItem('eventOrders')) || [];
+    if (orders.length > 0) {
+        const last = orders[orders.length - 1];
+        if (last.method === 'ElysiumPay') {
+            const amount = parseInt(last.total.replace(/[^\d]/g, ''));
+            const desc = `Thanh toán vé: ${last.event}`;
+            
+            const historyList = document.getElementById('history-list');
+            if (historyList && !historyList.innerText.includes(last.event)) {
+                addHistoryEntry(amount, false, 'payment', desc);
+                saveToHistory(amount, 'payment', desc);
+            }
+        }
+    }
+});
