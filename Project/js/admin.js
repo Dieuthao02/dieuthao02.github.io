@@ -63,6 +63,7 @@ function getMergedOrdersForAdmin() {
                 ...order,
                 id: order.id,
                 name: order.customer,
+                email: order.email,
                 event: order.event,
                 price: Number(String(order.total).replace(/\D/g, '')) || 0,
                 time: hms,
@@ -2497,7 +2498,7 @@ function loadRefundData() {
     const adminDisplay = document.getElementById('admin-balance-display');
     if (!tbody) return;
 
-    const adminBalance = parseInt(localStorage.getItem('admin_source_money')) || 1000000000;
+    const adminBalance = parseInt(localStorage.getItem('admin_source_money')) || 0;
     if (adminDisplay) adminDisplay.innerText = adminBalance.toLocaleString();
 
     let allOrders = JSON.parse(localStorage.getItem('eventOrders')) || [];
@@ -2651,7 +2652,7 @@ function executeRefund(reason) {
         return;
     }
 
-    let adminBalance = parseInt(localStorage.getItem('admin_source_money')) || 0;
+    let adminBalance = parseInt(localStorage.getItem('admin_source_money')) || 1000000000;
     if (adminBalance < amount) {
         alert("Nguồn tiền hệ thống không đủ để thực hiện hoàn trả!");
         return;
