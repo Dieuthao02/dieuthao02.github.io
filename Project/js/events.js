@@ -46,7 +46,9 @@ async function fetchEvents() {
             const buttons = document.querySelectorAll('.category-btn');
             let targetButton = null;
             buttons.forEach(btn => {
-                if (btn.innerText.trim().toLowerCase() === categoryFromUrl.toLowerCase()) {
+                const btnText = btn.innerText.trim().toLowerCase();
+                const urlCat = categoryFromUrl.toLowerCase();
+                if (btnText === urlCat || btnText.includes(urlCat) || urlCat.includes(btnText)) {
                     targetButton = btn;
                 }
             });
@@ -141,7 +143,6 @@ function getMinPrice(priceString) {
 }
 
 function filterCategory(category, btn = null) {
-
     const title = document.getElementById('categoryTitle');
     if (title) title.innerText = category === 'all' ? 'Tất cả sự kiện' : category;
 
@@ -153,7 +154,7 @@ function filterCategory(category, btn = null) {
         filtered = allEvents.filter(e => {
             if (!e.category) return false;
             const sheetCat = e.category.toString().trim().toLowerCase();
-            return sheetCat === targetCat;
+            return sheetCat.includes(targetCat); 
         });
     }
 
