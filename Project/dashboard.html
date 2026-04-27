@@ -325,24 +325,24 @@
 </div>
 
    <div id="modal-ticket-detail" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onclick="closeModal('modal-ticket-detail')">
-    <div class="bg-white rounded-[3rem] overflow-hidden max-w-sm w-[90%] shadow-2xl transform transition-all" onclick="event.stopPropagation()">
+    <div class="bg-white rounded-[2.5rem] overflow-hidden max-w-xs w-[82%] shadow-2xl transform transition-all" onclick="event.stopPropagation()">
         
-        <div class="bg-gradient-to-br from-gray-900 to-gray-800 p-8 text-white relative">
-            <div class="flex justify-between items-center mb-6">
+        <div class="bg-gradient-to-br from-gray-900 to-gray-800 p-5 text-white relative">
+            <div class="flex justify-between items-center mb-4">
                 <span class="text-xs font-black tracking-[0.3em] opacity-50 uppercase">Official Ticket</span>
                 <img src="logo.png" class="h-4 grayscale invert brightness-200 opacity-50" alt="">
             </div>
 
-            <div class="bg-white p-4 rounded-3xl mb-6 shadow-inner mx-auto w-fit">
+            <div class="bg-white p-3 rounded-2xl mb-4 shadow-inner mx-auto w-fit">
                 <img id="ticket-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=GAI-HOME-2026" 
-                     class="w-44 h-44" alt="QR Code">
+                     class="w-32 h-32" alt="QR Code">
             </div>
 
-            <h3 id="ticket-event-name" class="text-2xl font-black uppercase text-center mb-1 leading-none tracking-tight">GAI HOME CONCERT</h3>
-            <p id="ticket-seat" class="text-pink-400 font-black text-sm text-center tracking-[0.2em]">VIP A12 • ROW 01</p>
+            <h3 id="ticket-event-name" class="text-base font-black uppercase text-center mb-1 leading-none tracking-tight">GAI HOME CONCERT</h3>
+            <p id="ticket-seat" class="text-pink-400 font-black text-xs text-center tracking-[0.2em]">VIP A12 • ROW 01</p>
         </div>
 
-        <div class="p-8 pt-6 relative">
+        <div class="p-5 pt-4 relative">
             <div class="absolute -top-3 left-0 w-full flex justify-around opacity-20 text-gray-900">
                 <span>•</span><span>•</span><span>•</span><span>•</span><span>•</span><span>•</span><span>•</span><span>•</span>
             </div>
@@ -371,7 +371,7 @@
             </div>
 
             <button onclick="closeModal('modal-ticket-detail')" 
-                    class="w-full mt-8 py-4 bg-gray-100 rounded-2xl font-black text-[10px] uppercase text-gray-500 hover:bg-gray-200 transition-colors">
+                    class="w-full mt-5 py-3 bg-gray-100 rounded-2xl font-black text-[10px] uppercase text-gray-500 hover:bg-gray-200 transition-colors">
                 Đóng cửa sổ
             </button>
         </div>
@@ -434,7 +434,7 @@
     <!-- Lịch sử -->
 <div id="modal-history" class="modal" onclick="closeModal('modal-history')">
     <div class="bg-white rounded-[3rem] p-10 max-w-lg w-full max-h-[80vh] overflow-y-auto no-scrollbar" onclick="event.stopPropagation()">
-        <div class="flex justify-between items-center mb-6">
+        <div class="flex justify-between items-center mb-4">
             <h3 class="text-2xl font-black uppercase italic">Giao dịch gần đây</h3>
             <button onclick="printInvoice('Tất cả giao dịch', currentBalance.toLocaleString('vi-VN'))" class="text-pink-500 hover:text-pink-700">
                 <i class="fa-solid fa-print text-xl"></i>

@@ -1,11 +1,11 @@
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { firebaseConfig } from './firebase-config.js';
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    let currentBalance = parseInt(localStorage.getItem('currentBalance')) || 50000;
+    let currentBalance = parseInt(localStorage.getItem('currentBalance')) || 0;
     function syncBalanceToUI(amount) {
     const walletBalance = document.getElementById('balance-wallet');
     if (walletBalance) {
@@ -70,13 +70,15 @@
         };
 
         document.getElementById('logout-btn').onclick = (e) => {
-            e.stopPropagation();
-            signOut(auth).then(() => {
-                localStorage.removeItem('userLogin');
-                location.reload();
-            });
-        };
-    }
+        e.stopPropagation();
+        signOut(auth).then(() => {
+            localStorage.removeItem('userLogin');
+            window.location.href = 'index.html';
+        }).catch((error) => {
+            console.error("Lỗi khi đăng xuất:", error);
+        });
+    };
+}
 
     updateRealTime();
     updateTopBarUI();
@@ -575,8 +577,32 @@ function renderRefundTickets() {
     container.innerHTML = orders.reverse().map(order => {
         const totalQty = order.tickets.reduce((sum, t) => sum + (t.qty || 1), 0);
         const seatNames = order.tickets.map(t => t.name).join(', ');
-    
         const priceValue = parseInt(order.total.replace(/\D/g, ''));
+        const refundStatus = order.refundStatus; // undefined | 'pending' | 'approved' | 'rejected'
+
+        let refundBtn = '';
+        if (refundStatus === 'pending') {
+            refundBtn = `
+            <button disabled class="w-full bg-yellow-400 text-white py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider cursor-not-allowed flex items-center justify-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left animate-pulse"></i> Đã gửi yêu cầu - Đang chờ xử lý
+            </button>`;
+        } else if (refundStatus === 'approved') {
+            refundBtn = `
+            <button disabled class="w-full bg-green-500 text-white py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider cursor-not-allowed flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-check"></i> Đã hoàn tiền thành công
+            </button>`;
+        } else if (refundStatus === 'rejected') {
+            refundBtn = `
+            <button disabled class="w-full bg-red-400 text-white py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider cursor-not-allowed flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-xmark"></i> Yêu cầu bị từ chối
+            </button>`;
+        } else {
+            refundBtn = `
+            <button onclick="openRefundModal('${order.id}', ${priceValue})" 
+                    class="w-full bg-gray-900 text-white py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider hover:bg-red-600 transition-colors">
+                Yêu cầu hoàn tiền
+            </button>`;
+        }
 
         return `
         <div class="bg-white p-6 rounded-[2.5rem] border-2 border-gray-50 relative overflow-hidden group hover:shadow-xl transition-all">
@@ -607,10 +633,7 @@ function renderRefundTickets() {
                 </p>
             </div>
 
-            <button onclick="openRefundModal('${order.id}', ${priceValue})" 
-                    class="w-full bg-gray-900 text-white py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider hover:bg-red-600 transition-colors">
-                Yêu cầu hoàn tiền
-            </button>
+            ${refundBtn}
         </div>`;
     }).join('');
 }
@@ -771,13 +794,41 @@ window.addEventListener('storage', (e) => {
     }
 
     if (e.key === 'eventOrders') {
-        const orders = JSON.parse(e.newValue) || [];
-        if (orders.length > 0) {
-            const last = orders[orders.length - 1];
+        const newOrders = JSON.parse(e.newValue) || [];
+        const oldOrders = JSON.parse(e.oldValue || '[]') || [];
+
+        // Lắng nghe admin approve/reject hoàn tiền
+        newOrders.forEach(newOrder => {
+            const oldOrder = oldOrders.find(o => o.id === newOrder.id);
+            if (!oldOrder) return;
+
+            if (oldOrder.refundStatus === 'pending' && newOrder.refundStatus === 'approved') {
+                // Admin xác nhận → cộng tiền vào ví
+                const refundAmt = newOrder.amountToRefund || 0;
+                const newBalance = (parseInt(localStorage.getItem('currentBalance')) || 0) + refundAmt;
+                localStorage.setItem('currentBalance', newBalance);
+                if (typeof updateBalanceUI === 'function') updateBalanceUI(newBalance);
+                if (typeof addHistoryEntry === 'function') addHistoryEntry(refundAmt, false, 'deposit', `Hoàn tiền vé: ${newOrder.event}`);
+                if (typeof saveToHistory === 'function') saveToHistory(refundAmt, 'deposit', `Hoàn tiền vé: ${newOrder.event}`);
+                if (typeof renderRefundTickets === 'function') renderRefundTickets();
+                if (typeof renderMyTickets === 'function') renderMyTickets();
+                alert(`✅ Admin đã xác nhận hoàn ${new Intl.NumberFormat('vi-VN').format(refundAmt)}đ vào ví của bạn!`);
+            }
+
+            if (oldOrder.refundStatus === 'pending' && newOrder.refundStatus === 'rejected') {
+                // Admin từ chối
+                if (typeof renderRefundTickets === 'function') renderRefundTickets();
+                if (typeof renderMyTickets === 'function') renderMyTickets();
+                alert(`❌ Yêu cầu hoàn tiền cho vé "${newOrder.event}" đã bị từ chối.`);
+            }
+        });
+
+        // Giữ lại logic cũ
+        if (newOrders.length > 0) {
+            const last = newOrders[newOrders.length - 1];
             if (last.method === 'ElysiumPay') {
                 const amount = parseInt(last.total.replace(/[^\d]/g, ''));
                 const desc = `Thanh toán vé: ${last.event}`;
-                
                 addHistoryEntry(amount, false, 'payment', desc);
                 saveToHistory(amount, 'payment', desc);
             }

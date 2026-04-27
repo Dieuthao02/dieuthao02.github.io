@@ -382,6 +382,9 @@ function showTab(tabId, el) {
         if (typeof seedSupportTickets === 'function') {
             seedSupportTickets();
         }
+        setTimeout(() => {
+            if (typeof initSupportSearch === 'function') initSupportSearch();
+        }, 100);
     }
 
     if (tabId === 'activity') {
@@ -1796,38 +1799,39 @@ function initDummySupport() {
 }
 
 /* --- 5. HÀM TÌM KIẾM HỖ TRỢ  --- */
-function setupSupportSearch() {
-    const searchInput = document.querySelector('input[placeholder*="Tìm kiếm"]') || 
-                        document.querySelector('.support-search-input');
-
+function filterSupportList(searchTerm) {
     const listContainer = document.getElementById('support-list');
+    if (!listContainer) return;
 
-    if (!searchInput) {
-        console.error("Lỗi: Không tìm thấy ô nhập tìm kiếm!");
-        return;
-    }
-    if (!listContainer) {
-        console.error("Lỗi: Không tìm thấy vùng chứa danh sách (#support-list)!");
-        return;
-    }
-
-    console.log("Đã kết nối thanh Tìm kiếm thành công!"); 
-
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase().trim();
-        const allCards = listContainer.children;
-
-        Array.from(allCards).forEach(card => {
-            const cardText = card.innerText.toLowerCase();
-            
-            if (cardText.includes(searchTerm)) {
-                card.style.display = ''; 
-                card.style.animation = 'fadeIn 0.3s ease'; 
-            } else {
-                card.style.display = 'none'; 
-            }
-        });
+    const term = searchTerm.toLowerCase().trim();
+    Array.from(listContainer.children).forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(term) ? '' : 'none';
     });
+}
+
+function setupSupportSearch() {
+    // Dùng event delegation trên document để bắt input dù tab có ẩn hay không
+    document.addEventListener('input', (e) => {
+        const target = e.target;
+        // Khớp bất kỳ input nào trong tab support
+        if (
+            target.matches('input[placeholder*="Tìm"]') &&
+            target.closest('#support')
+        ) {
+            filterSupportList(target.value);
+        }
+    });
+}
+
+// Gọi thêm khi mở tab support để reset kết quả nếu cần
+function initSupportSearch() {
+    const input = document.querySelector('#support input[type="text"]');
+    if (!input) return;
+    input.value = '';
+    filterSupportList('');
+    // Đảm bảo listener không bị gắn 2 lần
+    input.oninput = (e) => filterSupportList(e.target.value);
 }
 
 
@@ -2423,14 +2427,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function replayAdminLogs() {
-    // initLiveFeed đã xử lý tất cả rồi, hàm này giữ để không lỗi khi gọi
+    // initLiveFeed 
 }
 
 function getPendingRefundOrders() {
     const allOrders = JSON.parse(localStorage.getItem('eventOrders')) || [];
     const refundHistory = JSON.parse(localStorage.getItem('admin_refunds')) || [];
     const completedIds = new Set(refundHistory.map(item => String(item.orderId)));
-    return allOrders.filter(order => order._isRefund === true && !completedIds.has(String(order.id)));
+    return allOrders.filter(order => 
+        order._isRefund === true && 
+        !completedIds.has(String(order.id)) &&
+        order.refundStatus !== 'approved' &&
+        order.refundStatus !== 'rejected'
+    );
 }
 
 function renderPendingRefundList() {
@@ -2447,10 +2456,12 @@ function renderPendingRefundList() {
     listEl.innerHTML = pendingOrders.map(order => {
         const customerName = order.customer || 'Khách hàng';
         const amount = Number(String(order.total || 0).replace(/\D/g, '')) || 0;
-        
+        const refundAmount = order.amountToRefund || Math.floor(amount * 0.95);
         const seats = order.tickets ? order.tickets.map(t => t.name).join(', ') : 'N/A';
         const quantity = order.tickets ? order.tickets.reduce((sum, t) => sum + (t.qty || 1), 0) : 1;
         const reason = order.refundReason || "Không có lý do";
+        const customerSafe = customerName.replace(/'/g, "\\'");
+        const reasonSafe = reason.replace(/'/g, "\\'");
 
         return `
             <div class="p-5 rounded-[2rem] bg-white/[0.03] border border-white/5 mb-4">
@@ -2464,13 +2475,24 @@ function renderPendingRefundList() {
                             <div class="text-[9px] text-gray-500">Đơn: #${order.id}</div>
                         </div>
                     </div>
-                    <div class="text-right text-red-400 text-[11px] font-black">${amount.toLocaleString()}đ</div>
+                    <div class="text-right text-red-400 text-[11px] font-black">${refundAmount.toLocaleString()}đ</div>
                 </div>
 
                 <div class="bg-black/20 p-3 rounded-2xl text-[10px] space-y-1 mb-3 border border-white/5">
                     <p class="text-gray-400">🎫 Sự kiện: <span class="text-white">${order.event}</span></p>
                     <p class="text-gray-400">💺 Ghế: <span class="text-blue-400">${seats} (x${quantity})</span></p>
                     <p class="text-gray-400">💬 Lý do: <span class="text-red-300 italic">"${reason}"</span></p>
+                </div>
+
+                <div class="flex gap-2">
+                    <button onclick="openRefundModal('${order.id}', '${customerSafe}', ${refundAmount}, '${reasonSafe}')"
+                            class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl text-[10px] font-black uppercase transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-circle-check"></i> Xác nhận hoàn
+                    </button>
+                    <button onclick="rejectRefund('${order.id}')"
+                            class="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl text-[10px] font-black uppercase transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-circle-xmark"></i> Từ chối
+                    </button>
                 </div>
             </div>
         `;
@@ -2483,7 +2505,6 @@ function updatePendingRefundUI() {
 
     if (badge) {
         badge.innerText = pendingOrders.length.toString();
-        // Ẩn badge nếu không có yêu cầu nào
         badge.style.display = pendingOrders.length === 0 ? 'none' : 'inline-block';
     }
 
@@ -2498,7 +2519,7 @@ function loadRefundData() {
     const adminDisplay = document.getElementById('admin-balance-display');
     if (!tbody) return;
 
-    const adminBalance = parseInt(localStorage.getItem('admin_source_money')) || 0;
+    const adminBalance = parseInt(localStorage.getItem('admin_source_money')) || 1000000000;
     if (adminDisplay) adminDisplay.innerText = adminBalance.toLocaleString();
 
     let allOrders = JSON.parse(localStorage.getItem('eventOrders')) || [];
@@ -2516,8 +2537,37 @@ function loadRefundData() {
             refundAmount = Math.floor(originalPrice * 0.95);
         }
         const isRefunded = refundHistory.some(r => String(r.orderId) === String(order.id));
+        const refundStatus = order.refundStatus; // 'pending' | 'approved' | 'rejected' | undefined
         const refundReason = (order.refundReason || "Khách yêu cầu hủy vé").replace(/'/g, "\\'");
         const customerSafe = (order.customer || 'Khách').replace(/'/g, "\\'");
+
+        let actionCell = '';
+        if (isRefunded || refundStatus === 'approved') {
+            actionCell = '<span class="text-[10px] font-black text-green-500 bg-green-500/10 px-3 py-1 rounded-lg border border-green-500/20">ĐÃ HOÀN TIỀN</span>';
+        } else if (refundStatus === 'rejected') {
+            actionCell = '<span class="text-[10px] font-black text-red-400 bg-red-400/10 px-3 py-1 rounded-lg border border-red-400/20">ĐÃ TỪ CHỐI</span>';
+        } else if (refundStatus === 'pending') {
+            actionCell = `
+                <div class="flex gap-1">
+                <button onclick="openRefundModal('${order.id}', '${customerSafe}', ${refundAmount}, '${refundReason}')" 
+                class="text-[9px] font-black text-white bg-green-500 px-2 py-1.5 rounded-lg hover:bg-green-600 transition-all flex items-center gap-1 whitespace-nowrap">
+                <i class="fa-solid fa-check"></i> Hoàn
+                </button>
+                <button onclick="rejectRefund('${order.id}')"
+                class="text-[9px] font-black text-white bg-red-500 px-2 py-1.5 rounded-lg hover:bg-red-600 transition-all flex items-center gap-1 whitespace-nowrap">
+                <i class="fa-solid fa-xmark"></i> Từ chối
+                </button>
+                </div>`;
+
+        } else {
+            actionCell = '<span class="text-[10px] text-gray-500">—</span>';
+        }
+
+        let statusBadge = '';
+        if (refundStatus === 'pending') {
+            statusBadge = '<span class="ml-2 text-[9px] font-black text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded-lg animate-pulse">⏳ CHỜ DUYỆT</span>';
+        }
+
          return `
             <tr class="hover:bg-white/[0.02] border-b border-white/5 transition-all">
                 <td class="p-6 text-xs font-bold text-white">#${order.id}</td>
@@ -2525,17 +2575,12 @@ function loadRefundData() {
                 <td class="p-6 text-xs text-gray-400">
                     ${order.event || 'Sự kiện'} 
                     <span class="text-blue-500 ml-2">(x${order.quantity || 1})</span>
+                    ${statusBadge}
                 </td>
                 <td class="p-6 text-xs font-bold text-gray-500">${originalPrice.toLocaleString()}đ</td>
                 <td class="p-6 text-xs font-black text-red-400">${refundAmount.toLocaleString()}đ</td>
                 <td class="p-6">
-                ${isRefunded 
-                    ? '<span class="text-[10px] font-black text-green-500 bg-green-500/10 px-3 py-1 rounded-lg border border-green-500/20">ĐÃ HOÀN TIỀN</span>' 
-                    : `<button onclick="openRefundModal('${order.id}', '${customerSafe}', ${refundAmount}, '${refundReason}')" 
-                        class="text-[10px] font-black text-white bg-red-500 px-4 py-2 rounded-xl hover:bg-red-600 transition-all">
-                        XÁC NHẬN HOÀN
-                       </button>`
-                    }
+                    ${actionCell}
                 </td>
             </tr>
         `;
@@ -2682,6 +2727,9 @@ function executeRefund(reason) {
     const orderIdx = allOrders.findIndex(o => String(o.id) === String(orderId));
     if (orderIdx !== -1) {
         allOrders[orderIdx]._isRefunded = true; 
+        allOrders[orderIdx]._isRefund = false;   
+        allOrders[orderIdx].refundStatus = 'approved';
+        allOrders[orderIdx].approvedAt = new Date().toLocaleString('vi-VN');
         localStorage.setItem('eventOrders', JSON.stringify(allOrders));
     }
 
@@ -2692,6 +2740,32 @@ function executeRefund(reason) {
     
     if (typeof addNotification === 'function') {
         addNotification("Thành công", `Đã hoàn ${amount.toLocaleString()}đ cho ${customerName}`, "SUCCESS");
+    }
+}
+
+// Hàm từ chối hoàn tiền
+function rejectRefund(orderId) {
+    if (!confirm(`Từ chối yêu cầu hoàn tiền cho đơn #${orderId}?`)) return;
+
+    let allOrders = JSON.parse(localStorage.getItem('eventOrders')) || [];
+    const idx = allOrders.findIndex(o => String(o.id) === String(orderId));
+    if (idx === -1) return alert("Không tìm thấy đơn hàng!");
+
+    allOrders[idx].refundStatus = 'rejected';
+    allOrders[idx]._isRefund = false; 
+    allOrders[idx].rejectedAt = new Date().toLocaleString('vi-VN');
+    localStorage.setItem('eventOrders', JSON.stringify(allOrders));
+
+    const pendingModal = document.getElementById('pending-refund-modal');
+    if (pendingModal && !pendingModal.classList.contains('hidden')) {
+        closePendingRefundsModal();
+    }
+
+    loadRefundData();
+    updatePendingRefundUI();
+
+    if (typeof addNotification === 'function') {
+        addNotification("Từ chối", `Đã từ chối hoàn tiền đơn #${orderId}`, "WARNING");
     }
 }
 
