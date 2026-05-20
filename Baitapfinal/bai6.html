@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Bookstore - Diệu Thảo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #c5a059;
+            --bg: #050505;
+            --text: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.02);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow: hidden; 
+        }
+
+        nav {
+            position: fixed;
+            top: -150px; 
+            left: 0; width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 40px 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.1);
+            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            opacity: 0;
+        }
+
+        nav:not(.hidden) {
+            top: 0;
+            opacity: 1;
+        }
+
+        ul {
+            display: flex; justify-content: center; align-items: center;
+            list-style: none; gap: 30px; margin: 0; padding: 0;
+        }
+
+        li a {
+            text-decoration: none; color: inherit;
+            font-size: 10px; text-transform: uppercase;
+            letter-spacing: 3px; opacity: 0.5;
+            transition: 0.4s; cursor: pointer;
+            position: relative;
+        }
+
+        li a:hover, li a.active {
+            opacity: 1; color: var(--gold);
+        }
+
+        li a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; left: 50%;
+            width: 0; height: 1px;
+            background: var(--gold);
+            transition: 0.4s;
+            transform: translateX(-50%);
+        }
+
+        li a:hover::after, li a.active::after { width: 20px; }
+
+        .bullet { color: var(--gold); opacity: 0.3; font-size: 8px; }
+
+        .container {
+            height: 100vh; display: flex;
+            justify-content: center; align-items: center;
+            text-align: center;
+        }
+
+        .tab-content {
+            display: none;
+            max-width: 800px; padding: 40px;
+        }
+
+        .tab-content.active { 
+            display: block; 
+            animation: luxuryIn 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+
+        @keyframes luxuryIn {
+            from { opacity: 0; transform: translateY(30px); filter: blur(15px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 70px; font-weight: 700; margin: 0;
+            background: linear-gradient(to bottom, var(--gold), #8e7341);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-style: italic;
+        }
+
+        p { 
+            opacity: 0.6; font-weight: 300; line-height: 2; 
+            letter-spacing: 1px; margin-top: 20px; font-size: 14px;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            bottom: 40px; right: 40px;
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold); 
+            padding: 12px 30px;
+            border-radius: 2px; cursor: pointer;
+            font-size: 10px; text-transform: uppercase;
+            letter-spacing: 2px; z-index: 1002;
+            transition: 0.4s;
+        }
+
+        .toggle-btn:hover { 
+            background: var(--gold); 
+            color: white;
+            box-shadow: 0 10px 30px rgba(197, 160, 89, 0.2);
+        }
+
+        .bg-ornament {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(197, 160, 89, 0.04) 0%, transparent 70%);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-ornament"></div>
+    <nav id="bookNav" class="hidden">
+        <ul>
+            <li><a onclick="switchTab(event, 'home')" class="active">Home</a></li>
+            <li class="bullet">•</li>
+            <li><a onclick="switchTab(event, 'books')">Books &copy;</a></li>
+            <li class="bullet">•</li>
+            <li><a onclick="switchTab(event, 'authors')">Authors &trade;</a></li>
+            <li class="bullet">•</li>
+            <li><a onclick="switchTab(event, 'contact')">Contact &copy;</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div id="home" class="tab-content active">
+            <h1>Thảo's Library</h1>
+            <p>A sanctuary for those who find solace in pages and pixels.<br>Bấm vào nút phía dưới để điều hướng không gian.</p>
+        </div>
+        <div id="books" class="tab-content">
+            <h1>The Collection &copy;</h1>
+            <p>Nơi lưu giữ những tri thức về Tài chính và Công nghệ số,<br>được tuyển chọn khắt khe cho thế hệ Alpha.</p>
+        </div>
+        <div id="authors" class="tab-content">
+            <h1>Masterminds &trade;</h1>
+            <p>Những bộ óc vĩ đại đứng sau các tác phẩm thay đổi thế giới.<br>Từ triết học cổ điển đến tư duy Fintech đột phá.</p>
+        </div>
+        <div id="contact" class="tab-content">
+            <h1>Contact &copy;</h1>
+            <p>Gửi lời nhắn đến chúng tôi để cùng thảo luận về tương lai của giáo dục và AI.<br>Hanoi, Vietnam | 2026</p>
+        </div>
+    </div>
+
+    <button class="toggle-btn" onclick="toggleMenu()">Toggle Menu</button>
+
+<script>
+    function toggleMenu() {
+        const nav = document.getElementById("bookNav");
+        nav.classList.toggle("hidden");
+    }
+
+    function switchTab(event, id) {
+        const tabs = document.getElementsByClassName('tab-content');
+        const links = document.querySelectorAll('li a');
+        for(let tab of tabs) {
+            tab.classList.remove('active');
+        }
+        links.forEach(link => link.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.currentTarget.classList.add('active');
+        
+        toggleMenu();
+    }
+</script>
+
+</body>
+</html>

@@ -1,148 +1,203 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title> Registration</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Registration</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap');
 
-        :root {
-            --bg: #03000a;
-            --accent: #00d2ff;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
-        }
+    :root {
+        --bg: #03000a;
+        --accent: #00d2ff;
+        --accent-glow: rgba(0, 210, 255, 0.4);
+        --glass: rgba(255, 255, 255, 0.03);
+        --border: rgba(255, 255, 255, 0.1);
+        --input-bg: rgba(255, 255, 255, 0.05);
+    }
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg);
-            background-image: radial-gradient(circle at 50% 50%, #101525 0%, #03000a 100%);
-            color: #fff;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-        .main-container {
-            display: grid;
-            grid-template-columns: 1.3fr 0.7fr;
-            width: 95%;
-            max-width: 1200px;
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            border: 1px solid var(--border);
-            border-radius: 32px;
-            overflow: hidden;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
-        }
+    body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: var(--bg);
+        background-image: 
+            radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.05) 0%, transparent 20%),
+            radial-gradient(circle at 90% 80%, rgba(0, 90, 142, 0.1) 0%, transparent 20%),
+            radial-gradient(circle at 50% 50%, #0a0e1a 0%, #03000a 100%);
+        color: #fff;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
 
-        
-        .left-side { padding: 40px; border-right: 1px solid var(--border); overflow-y: auto; max-height: 90vh; }
-        
-        .form-header {
-            background: linear-gradient(90deg, #005a8e, #00d2ff);
-            color: white;
-            text-align: center;
-            padding: 12px;
-            font-weight: bold;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            font-family: 'Orbitron';
-            letter-spacing: 2px;
-        }
+    .main-container {
+        width: 90%;
+        max-width: 650px;
+        background: var(--glass);
+        padding: 40px;
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid var(--border);
+        border-radius: 40px;
+        box-shadow: 
+            0 25px 50px -12px rgba(0, 0, 0, 0.5),
+            inset 0 0 20px rgba(255, 255, 255, 0.02);
+        animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
 
-        .input-group { margin-bottom: 12px; display: grid; grid-template-columns: 150px 1fr; align-items: center; }
-        .label { font-size: 0.85rem; font-weight: 600; color: #aaa; }
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-        input[type="text"], input[type="password"], textarea, select {
-            width: 100%;
-            padding: 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: #fff;
-            box-sizing: border-box;
-        }
-        
-        input[type="file"] { color: #888; font-size: 0.8rem; }
+    .form-header {
+        font-family: 'Orbitron';
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+        margin-bottom: 40px;
+        letter-spacing: 4px;
+        font-weight: 700;
+    }
 
-        
-        .check-group { display: flex; gap: 15px; font-size: 0.9rem; }
-        select option {
-    background-color: #1a1a1a; 
-    color: #ffffff;    
-    padding: 10px;
-}
+    .input-group {
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: 160px 1fr; 
+        gap: 15px;
+        align-items: center;
+    }
 
-        
-        .lang-container { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
-        .lang-chip {
-            padding: 6px 12px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .lang-chip.active { background: var(--accent); color: #000; font-weight: bold; border-color: var(--accent); }
+    .label {
+        font-size: 0.7rem; 
+        font-weight: 600;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        white-space: nowrap; 
+    }
 
-        .btn-row { margin-top: 25px; display: flex; gap: 10px; }
-        .btn-row button {
-            flex: 1; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; transition: 0.3s;
-        }
-        .btn-submit { background: var(--accent); color: #000; }
-        .btn-reset { background: #222; color: #fff; }
+    input[type="text"], 
+    input[type="password"], 
+    textarea, 
+    select {
+        background: var(--input-bg);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px 18px;
+        color: #fff;
+        font-family: inherit;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        outline: none;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
-        
-        .right-side {
-            padding: 40px;
-            background: rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+    input:focus, textarea:focus, select:focus {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--accent);
+        box-shadow: 0 0 20px var(--accent-glow);
+        transform: translateY(-1px);
+    }
 
-        .clock-card {
-            text-align: center;
-            background: rgba(255,255,255,0.02);
-            padding: 40px 20px;
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            width: 100%;
-        }
+    .input-group div[style*="flex"] {
+        display: flex !important;
+        gap: 10px !important;
+    }
 
-        #t_val { 
-            font-size: 2.8rem; 
-            font-family: 'Orbitron'; 
-            color: var(--accent); 
-            text-shadow: 0 0 30px rgba(0,210,255,0.5); 
-            margin-bottom: 10px;
-        }
-        #d_val { font-size: 0.8rem; color: #666; letter-spacing: 1px; }
+    .check-group { display: flex; gap: 20px; flex-wrap: wrap; }
+    .check-group label {
+        cursor: pointer;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #aaa;
+        transition: 0.2s;
+    }
+    .check-group label:hover { color: var(--accent); }
 
-       
-        .clock-controls { 
-            margin-top: 30px; 
-            display: flex; 
-            justify-content: center; 
-        }
-        .clock-controls button {
-            padding: 10px 20px; 
-            background: rgba(255,255,255,0.05); 
-            border: 1px solid #444; 
-            color: #ccc; 
-            border-radius: 30px; 
-            cursor: pointer; 
-            font-size: 0.75rem;
-            font-family: 'Orbitron';
-            transition: 0.3s;
-        }
-        .clock-controls button:hover { border-color: var(--accent); color: white; background: rgba(0, 210, 255, 0.1); }
-    </style>
+    .lang-container {
+        display: flex;
+        flex-wrap: nowrap; 
+        gap: 8px;
+        justify-content: flex-start;
+    }
+
+    .lang-chip {
+        padding: 6px 10px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 0.65rem; 
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        text-align: center;
+        flex: 1; 
+        white-space: nowrap;
+    }
+
+    .lang-chip.active {
+        background: var(--accent);
+        color: #03000a;
+        border-color: var(--accent);
+        box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .btn-row { margin-top: 40px; display: flex; gap: 15px; }
+    .btn-row button {
+        flex: 1;
+        padding: 16px;
+        border-radius: 16px;
+        font-family: 'Orbitron';
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.8rem;
+    }
+
+    .btn-submit {
+        background: var(--accent);
+        color: #03000a;
+        border: none;
+        box-shadow: 0 8px 20px rgba(0, 210, 255, 0.2);
+    }
+    .btn-submit:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 210, 255, 0.4);
+        filter: brightness(1.1);
+    }
+
+    .btn-reset {
+        background: transparent;
+        color: #fff;
+        border: 1px solid var(--border);
+    }
+    .btn-reset:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: #ff4b2b;
+        color: #ff4b2b;
+    }
+
+    option { background: #0a0e1a; color: #fff; }
+
+    @media (max-width: 600px) {
+        .input-group { grid-template-columns: 1fr; gap: 5px; }
+        .main-container { padding: 25px; border-radius: 25px; }
+    }
+</style>
 </head>
 <body onload="play()">
 
@@ -179,12 +234,23 @@
                 <div class="label">Email</div>
                 <input type="text" name="txtEmail">
             </div>
+
+            <div class="input-group">
+                <div class="label">Birthday</div>
+                <div style="display: flex; gap: 10px;">
+                    <select id="monthSelect" name="selMonth" style="flex: 2;"></select>
+                    <input type="text" id="birth_day" name="txtDay" placeholder="DD" style="flex: 1; text-align: center;">
+                    <input type="text" id="birth_year" name="txtYear" placeholder="YYYY" style="flex: 1.5; text-align: center;">
+                </div>
+            </div>
             
             <div class="input-group">
                 <div class="label">Favourite</div>
                 <div class="check-group">
                     <label><input type="checkbox" name="chkMusic"> Music</label>
                     <label><input type="checkbox" name="chkReading"> Reading</label>
+                    <label><input type="checkbox" name="chkFilms"> Films</label>
+                    <label><input type="checkbox" name="chkSports"> Sports</label>
                 </div>
             </div>
 
@@ -223,58 +289,12 @@
             </div>
         </form>
     </div>
-
-    <div class="right-side">
-        <div class="clock-card">
-            <div id="t_val">00:00:00 AM</div>
-            <div id="d_val">SYSTEM LOADING...</div>
-            
-            <div class="clock-controls">
-                <button onclick="play()">PLAY</button>
-                <button onclick="stopClock()">STOP</button>
-            </div>
-        </div>
-        
-        <div style="margin-top: 40px; text-align: center;">
-            <div style="color: var(--accent); font-weight: bold; font-size: 0.7rem; letter-spacing: 3px;">HÀ NỘI, VIỆT NAM </div>
-            <div style="font-size: 2rem; margin: 10px 0;">26°C</div>
-            <div style="color: #444; font-size: 0.75rem; font-family: 'Orbitron';">WEATHER STATION</div>
-        </div>
-    </div>
 </div>
 
 <script>
-   
-    var timer = null;
-    function play() {
-        if (timer) clearTimeout(timer); 
-        var daysOfWeek = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
-        var today = new Date();
-        
-        document.getElementById('d_val').innerText = daysOfWeek[today.getDay()].toUpperCase() + 
-            " • " + today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
-
-        var h = today.getHours();
-        var ampm = h >= 12 ? "PM" : "AM";
-        var hDisplay = h % 12 || 12;
-        var m = today.getMinutes().toString().padStart(2, '0');
-        var s = today.getSeconds().toString().padStart(2, '0');
-        
-        document.getElementById('t_val').innerHTML = hDisplay + ":" + m + ":" + s + " <small style='font-size:1.2rem; opacity:0.3'>" + ampm + "</small>";
-
-        timer = setTimeout(play, 1000);
-    }
-
-    function stopClock() { 
-        clearTimeout(timer); 
-        timer = null;
-    }
-
-   
     function toggleLang(el) {
         el.classList.toggle('active');
     }
-
    
     function formValid(e) {
         var f = document.frmRegister;
@@ -322,6 +342,18 @@
 
         alert("All register information are correct.");
         return true;
+    }
+
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+    const select = document.getElementById('monthSelect');
+    if (select.options.length === 0) { 
+        monthNames.forEach((month, index) => {
+            let opt = document.createElement('option');
+            opt.value = index + 1;
+            opt.innerHTML = month;
+            select.appendChild(opt);
+        });
     }
 </script>
 </body>
