@@ -354,9 +354,9 @@
         <nav>
             <div class="nav-logo">DIEUTHAO.</div>
             <ul class="nav-links">
-                <li><a onclick="switchPage('page-home')" id="nav-page-home" class="active">Trang Chủ & Định Hướng</a></li>
-                <li><a onclick="switchPage('page-exercises')" id="nav-page-exercises" >Hệ Thống Bài Tập</a></li>
-                <li><a onclick="switchPage('page-contact')" id="nav-page-contact">Tổng Kết & Liên Hệ</a></li>
+                <li><a onclick="switchPage('page-home')" id="nav-page-home">Trang Chủ & Định Hướng</a></li>
+                <li><a onclick="switchPage('page-exercises')" id="nav-page-exercises">Hệ Thống Bài Tập</a></li>
+                <li><a onclick="switchPage('page-contact')" id="nav-page-contact" class="active">Tổng Kết & Liên Hệ</a></li>
             </ul>
         </nav>
 
@@ -670,7 +670,7 @@
                     </div>
                     <div class="summary-card">
                         <h4><i class="fas fa-trophy"></i> Thách thức gặp phải</h4>
-                        <p>Việc chọn Wix làm công cụ xây dựng Portfolio đã mang đến cho em nhiều trải nghiệm thú vị. Điểm em tâm đắc nhất chính là tính linh hoạt và kho giao diện đa dạng, cho phép em tự tay thiết kế không gian cá nhân mà không cần biết lập trình. Quá trình này giúp em hiểu hơn về tư duy trải nghiệm người dùng (UX/UI), biến những sản phẩm học tập vốn khô khan trở nên trực quan và thu hút.
+                        <p>Việc xây dựng Portfolio đã mang đến cho em nhiều trải nghiệm thú vị. Điểm em tâm đắc nhất chính là tính linh hoạt và kho giao diện đa dạng, cho phép em tự tay thiết kế không gian cá nhân mà không cần biết lập trình. Quá trình này giúp em hiểu hơn về tư duy trải nghiệm người dùng (UX/UI), biến những sản phẩm học tập vốn khô khan trở nên trực quan và thu hút.
 
 Tuy nhiên, thử thách lớn nhất là làm sao cân bằng giữa thẩm mỹ và tính ứng dụng. Đôi khi, quá nhiều tính năng dễ khiến bố cục bị rối, buộc em phải dành thời gian tối ưu hóa cấu trúc để trang web vừa đẹp, vừa dễ điều hướng. Chính sự chỉn chu này đã dạy em bài học quý giá về tư duy chuyên nghiệp trong cách trình bày nội dung số.</p>
                         </div>
@@ -954,7 +954,7 @@ Tuy nhiên, thử thách lớn nhất là làm sao cân bằng giữa thẩm m�
     }
         };
 
-        function switchPage(pageId) {
+         function switchPage(pageId) {
             document.querySelectorAll('.page-view').forEach(page => {
                 page.classList.remove('active');
             });
@@ -974,7 +974,7 @@ Tuy nhiên, thử thách lớn nhất là làm sao cân bằng giữa thẩm m�
 
         document.addEventListener("DOMContentLoaded", function() {
         // Chỉ cần gọi hàm này khi F5 là xong
-        switchPage('page-home');
+        switchPage('page-contact');
     });
 
         function previewPdf(title, url, element) {
