@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Dual-Path AI Learning Framework — Corrected</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #fff;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    color: #1a1a1a;
+  }
+  .canvas {
+    position: relative;
+    width: 1600px;
+    height: 1080px;
+    margin: 0 auto;
+    background: #fff;
+    border: 2px solid #111;
+  }
+  .title {
+    text-align: center;
+    padding-top: 14px;
+  }
+  .title h1 {
+    margin: 0;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+  }
+  .title h2 {
+    margin: 4px 0 0;
+    font-size: 15px;
+    font-style: italic;
+    font-weight: normal;
+  }
+  .title h3 {
+    margin: 2px 0 0;
+    font-size: 13px;
+    font-style: italic;
+    font-weight: normal;
+  }
+  .box {
+    position: absolute;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  .panel-title {
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .item-row {
+    background: #dbeafe;
+    border: 1px solid #93c5fd;
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin-bottom: 2px;
+    font-size: 10px;
+    text-align: center;
+  }
+  .item-row.removed {
+    background: #fff;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    font-weight: bold;
+  }
+  .item-row.green { background:#dcfce7; border-color:#86efac; }
+  .item-row.purple { background:#ede9fe; border-color:#c4b5fd; }
+  .item-row.pink { background:#fce7f3; border-color:#f9a8d4; }
+
+  .circle {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 12px;
+    border: 3px solid;
+    font-weight: bold;
+  }
+  .circle .sub { font-weight: normal; font-size: 10px; margin-top: 2px;}
+  .circle .r2 { font-size: 10px; margin-top: 3px; font-weight: normal; }
+
+  .hyp-label {
+    position: absolute;
+    font-size: 11px;
+    text-align: center;
+    font-weight: bold;
+  }
+  .hyp-label .stat {
+    font-weight: normal;
+    font-size: 10px;
+    color: #1d4ed8;
+  }
+  .hyp-label.corrected {
+    color: #b91c1c;
+  }
+  .badge {
+    position: absolute;
+    background: #b91c1c;
+    color: #fff;
+    font-size: 9px;
+    font-weight: bold;
+    padding: 1px 5px;
+    border-radius: 3px;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  .infobox {
+    position: absolute;
+    border: 1.5px solid #111;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 10.5px;
+    background: #fff;
+  }
+  .infobox h4 {
+    margin: 0 0 4px;
+    font-size: 11px;
+    text-align: center;
+  }
+  .infobox ul { margin: 2px 0; padding-left: 14px; }
+  .infobox li { margin-bottom: 1px; }
+
+  svg.arrows { position: absolute; top:0; left:0; width:1600px; height:1080px; pointer-events:none; }
+
+  .footer-note {
+    position: absolute;
+    bottom: 4px;
+    left: 20px;
+    font-size: 10px;
+    font-style: italic;
+  }
+
+  .legend-panel { border: 1.5px solid #111; border-radius:6px; padding:6px 10px; font-size:10.5px;}
+  .legend-item { display:flex; align-items:center; gap:6px; margin-bottom:3px;}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<div class="title">
+  <h1>DUAL-PATH AI LEARNING FRAMEWORK (Final Refined Model — CORRECTED)</h1>
+  <h2>Seven-Construct Model with Sixteen Hypotheses (H1–H16)</h2>
+  <h3>Explaining Both the Enhancement Path and the Risk Path of Generative AI Use in Vietnamese Higher Education</h3>
+</div>
+
+<!-- ================= LEFT PANELS ================= -->
+<div class="infobox" style="left:18px; top:95px; width:230px;">
+  <h4>INPUT / CONTEXT LAYER</h4>
+  <div class="panel-title">Institutional Readiness (IR)</div>
+  <div class="item-row">IR1</div>
+  <div class="item-row">IR2</div>
+  <div class="item-row">IR3</div>
+  <div class="item-row">IR4</div>
+  <div class="item-row removed">IR5 (R)</div>
+  <div class="panel-title" style="margin-top:6px;">Academic Ethical Responsibility (AER)</div>
+  <div class="item-row">AER1</div>
+  <div class="item-row">AER2</div>
+  <div class="item-row">AER3</div>
+  <div class="item-row">AER4</div>
+  <div class="item-row removed">AER5 (R)</div>
+  <div class="item-row removed">AER6 (R)</div>
+</div>
+
+<div class="infobox" style="left:18px; top:400px; width:230px;">
+  <h4>CONTROL LAYER</h4>
+  <div class="panel-title">Critical Evaluation (CE)</div>
+  <div class="item-row green">CE1</div>
+  <div class="item-row green">CE2</div>
+  <div class="item-row green">CE3</div>
+  <div class="item-row green">CE4</div>
+  <div class="item-row removed">CE5 (R)</div>
+  <div class="item-row removed">CE6 (R)</div>
+</div>
+
+<div class="infobox" style="left:18px; top:610px; width:230px;">
+  <h4>DARK SIDE LAYER</h4>
+  <div class="panel-title">AI Dependency (AD)</div>
+  <div class="item-row removed">AD1 (R)</div>
+  <div class="item-row purple">AD2</div>
+  <div class="item-row purple">AD3</div>
+  <div class="item-row purple">AD4</div>
+</div>
+
+<!-- ================= RIGHT PANELS ================= -->
+<div class="infobox" style="right:18px; top:95px; width:250px; border-color:#b91c1c;">
+  <h4 style="color:#b91c1c;">(R) REMOVED ITEMS AFTER REFINEMENT (7 items)</h4>
+  <ul style="color:#b91c1c; font-weight:bold;">
+    <li>IR5</li>
+    <li>AER5, AER6</li>
+    <li>CE5, CE6</li>
+    <li>AD1</li>
+    <li>CR4</li>
+  </ul>
+</div>
+
+<div class="infobox" style="right:18px; top:255px; width:180px;">
+  <h4>OUTCOME LAYER</h4>
+  <div class="item-row pink">OUT1</div>
+  <div class="item-row pink">OUT2</div>
+  <div class="item-row pink">OUT3</div>
+  <div class="item-row pink">OUT4</div>
+  <div class="item-row pink">OUT5</div>
+  <div class="item-row pink">CR1</div>
+  <div class="item-row pink">CR2</div>
+  <div class="item-row pink">CR3</div>
+  <div class="item-row pink">CR5</div>
+</div>
+
+<div class="infobox" style="right:18px; top:625px; width:250px;">
+  <h4>ACO COMPOSITION (9 items)</h4>
+  ACO was formed by combining OUT (5 items) and CR (4 items, after removing CR4).<br><br>
+  ACO = OUT1–5 + CR1, CR2, CR3, CR5 (total 9 items)
+</div>
+
+<div class="infobox" style="right:18px; top:730px; width:250px; border-color:#b91c1c;">
+  <h4 style="color:#b91c1c;">HTMT (Before Combining)</h4>
+  OUT vs CR: 0,958 (&gt; 0,85)<br>
+  → Lack of discriminant validity<br>
+  → Combined into ACO
+</div>
+
+<div class="infobox" style="right:18px; top:850px; width:250px;">
+  <h4>MODEL FIT (PLS-SEM)</h4>
+  SRMR = 0,050<br>
+  R²: AIB = 0,454; PE = 0,866;<br>
+  CE = 0,949; AD = 0,038; ACO = 0,805<br>
+  Q² (predict): 0,308 – 0,314<br>
+  (cho các construct nội sinh)
+</div>
+
+<!-- ================= ARROWS SVG ================= -->
+<svg class="arrows" viewBox="0 0 1600 1080">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#111"/>
+    </marker>
+    <marker id="arrowred" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#b91c1c"/>
+    </marker>
+  </defs>
+
+  <!-- H1: IR -> AIB -->
+  <line x1="490" y1="185" x2="700" y2="185" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- H2: AER -> CE -->
+  <line x1="440" y1="470" x2="670" y2="470" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- H3: AIB -> PE -->
+  <line x1="855" y1="185" x2="1010" y2="185" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- H4: AIB -> CE -->
+  <line x1="770" y1="220" x2="740" y2="400" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- H4b: PE -> CE (labelled H4 area too, actually PE->CE) -->
+  <line x1="1030" y1="220" x2="800" y2="400" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- H5: PE -> ACO -->
+  <line x1="1100" y1="220" x2="1230" y2="420" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- H6: CE -> ACO -->
+  <line x1="850" y1="450" x2="1120" y2="460" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- H7: CE -> AD (corrected) -->
+  <line x1="740" y1="500" x2="720" y2="590" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#arrowred)"/>
+  <!-- H8: AD -> ACO (corrected, non-significant) -->
+  <line x1="800" y1="640" x2="1100" y2="510" stroke="#b91c1c" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowred)"/>
+  <!-- H9: IR -> CE direct -->
+  <line x1="400" y1="230" x2="400" y2="360" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="6,4"/>
+  <line x1="400" y1="360" x2="670" y2="440" stroke="#b91c1c" stroke-width="2" marker-end="url(#arrowred)"/>
+  <!-- H16 moderation dashed to ACO (corrected, non-significant -> gray/dashed) -->
+  <line x1="900" y1="700" x2="1160" y2="510" stroke="#059669" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow)"/>
+</svg>
+
+<!-- ================= CIRCLES ================= -->
+<div class="circle" style="left:290px; top:120px; width:130px; height:130px; background:#dbeafe; border-color:#3b82f6;">
+  Institutional Readiness (IR)
+  <div class="sub">(exogenous — no R²)</div>
+</div>
+
+<div class="circle" style="left:280px; top:400px; width:130px; height:130px; background:#dcfce7; border-color:#22c55e;">
+  Academic Ethical Responsibility (AER)
+  <div class="sub">(exogenous — no R²)</div>
+</div>
+
+<div class="circle" style="left:700px; top:120px; width:150px; height:150px; background:#fed7aa; border-color:#f97316;">
+  AI Interaction Behavior (AIB)
+  <div class="r2">R² = 0,454</div>
+</div>
+
+<div class="circle" style="left:1010px; top:120px; width:150px; height:150px; background:#fed7aa; border-color:#f97316;">
+  Process Efficiency (PE)
+  <div class="r2">R² = 0,866</div>
+</div>
+
+<div class="circle" style="left:665px; top:390px; width:150px; height:150px; background:#dcfce7; border-color:#22c55e;">
+  Critical Evaluation (CE)
+  <div class="r2">R² = 0,949</div>
+</div>
+
+<div class="circle" style="left:645px; top:590px; width:135px; height:135px; background:#ede9fe; border-color:#8b5cf6;">
+  AI Dependency (AD)
+  <div class="r2">R² = 0,038</div>
+</div>
+
+<div class="circle" style="left:1120px; top:400px; width:150px; height:150px; background:#fce7f3; border-color:#ec4899;">
+  Academic and Career Outcomes (ACO)
+  <div class="r2">R² = 0,805</div>
+</div>
+
+<!-- ================= HYPOTHESIS LABELS ================= -->
+<div class="hyp-label" style="left:560px; top:150px;">H1<br><span class="stat">(+)</span></div>
+<div class="hyp-label" style="left:520px; top:440px;">H2<br><span class="stat">(+)</span></div>
+<div class="hyp-label" style="left:900px; top:150px;">H3<br><span class="stat">(+)</span></div>
+<div class="hyp-label" style="left:730px; top:280px;">H4<br><span class="stat">(+)</span></div>
+<div class="hyp-label" style="left:955px; top:290px;">H4<br><span class="stat">(+)</span></div>
+<div class="hyp-label" style="left:1150px; top:290px;">H5<br><span class="stat">(+)<br>β=+0,599; p=0,076</span></div>
+<div class="hyp-label" style="left:995px; top:400px;">H6<br><span class="stat">(+)<br>β=+0,315; p=0,150</span></div>
+
+<div class="hyp-label corrected" style="left:735px; top:530px;">
+  H7 (−)
+  <span class="stat">β=-0,195; p&lt;0,001</span>
+  <span class="badge">CORRECTED p</span>
+</div>
+
+<div class="hyp-label corrected" style="left:950px; top:590px;">
+  H8 (n.s.)
+  <span class="stat">β=+0,015; t=0,305; p=0,649<br>(NOT supported)</span>
+  <span class="badge">CORRECTED (sign, value, p)</span>
+</div>
+
+<div class="hyp-label corrected" style="left:430px; top:290px;">
+  H9 (−) (direct)
+  <span class="stat">IR → CE</span>
+</div>
+
+<div class="infobox" style="left:840px; top:660px; width:270px; border-color:#059669;">
+  <h4 style="color:#059669;">H16 (Moderation)</h4>
+  AER × AD → ACO (Interaction Effect)<br>
+  <b>β=-0,009; t=-0,210; p=0,869</b><br>
+  → <b>NOT supported</b> (no significant moderation)
+  <div class="badge" style="position:static; display:inline-block; margin-top:4px; background:#b91c1c;">CORRECTED — was falsely shown as significant; fabricated f²=0,033 removed</div>
+</div>
+
+<!-- ================= SERIAL MEDIATION ================= -->
+<div class="infobox" style="left:260px; top:770px; width:390px;">
+  <h4>SERIAL MEDIATION HYPOTHESES</h4>
+  <ul>
+    <li>H10: AIB → PE → CE (indirect effect)</li>
+    <li>H11: PE → CE → ACO (indirect effect)</li>
+    <li>H12: CE → AD → ACO (indirect effect)</li>
+    <li>H13: AIB → PE → CE → ACO (indirect effect)</li>
+    <li>H14: AIB → PE → CE → AD → ACO (indirect effect)</li>
+    <li>H15: IR → AIB → PE → CE → ACO (indirect effect)</li>
+  </ul>
+</div>
+
+<!-- ================= BOTTOM ROW: THEORY / METHOD / ML / APPROACH ================= -->
+<div class="legend-panel" style="left:18px; top:900px; width:150px;">
+  <b>LEGEND</b><br>
+  <div class="legend-item">→ Positive Effect (+)</div>
+  <div class="legend-item">→ Negative Effect (−)</div>
+  <div class="legend-item" style="color:#1d4ed8;">⇢ Mediation Path</div>
+  <div class="legend-item" style="color:#059669;">⇢ Moderation/Interaction</div>
+  <div class="legend-item">○ Latent Construct</div>
+  <div class="legend-item">▭ Observed Indicator</div>
+  <div class="legend-item" style="color:#b91c1c;">R = Removed Item</div>
+</div>
+
+<div class="infobox" style="left:180px; top:900px; width:280px;">
+  <h4>THEORETICAL FOUNDATION</h4>
+  <ul>
+    <li>UTAUT (Venkatesh et al., 2003)</li>
+    <li>Affordance Theory (Gibson, 1986)</li>
+    <li>Institutional Theory (Scott, 2014; DiMaggio &amp; Powell, 1983)</li>
+    <li>Cognitive Offloading Theory (Risko &amp; Gilbert, 2016)</li>
+    <li>Social Cognitive Theory (Bandura, 1986)</li>
+    <li>Metacognition Theory (Flavell, 1979)</li>
+    <li>Self-Regulated Learning (Zimmerman, 2000)</li>
+    <li>Responsible AI / UNESCO (2023)</li>
+  </ul>
+</div>
+
+<div class="infobox" style="left:475px; top:900px; width:260px;">
+  <h4>MEASUREMENT &amp; STRUCTURAL MODEL</h4>
+  <ul>
+    <li>Reflective constructs; Cronbach's Alpha &gt; 0,70</li>
+    <li>Composite Reliability &gt; 0,70; AVE &gt; 0,50</li>
+    <li>HTMT &lt; 0,85 (after combining); VIF &lt; 5</li>
+    <li>Bootstrapping: 5.000 resamples; p &lt; 0,05 (2-tailed)</li>
+    <li>R² &gt; 0,40 for main endogenous</li>
+    <li>f²: 0,02 / 0,15 / 0,35 (small/medium/large)</li>
+    <li>Q² (predict): 0,308 – 0,314</li>
+  </ul>
+</div>
+
+<div class="infobox" style="left:750px; top:900px; width:240px;">
+  <h4>COMPLEMENTARY ML ANALYSES</h4>
+  <ul>
+    <li>XGBoost + SHAP (non-linear prediction &amp; explanation)</li>
+    <li>Random Forest (robustness check)</li>
+    <li>Consistency check with PLS-SEM</li>
+    <li>(Kết quả ML chi tiết: Mục 8.7–8.8 và Bảng 8.10–8.13)</li>
+  </ul>
+</div>
+
+<div class="infobox" style="left:1005px; top:900px; width:250px;">
+  <h4>RESEARCH APPROACH</h4>
+  <ul>
+    <li>Explanatory Sequential Mixed-methods (QUAN → qual)</li>
+    <li>Cross-sectional survey (N = 600)</li>
+    <li>PLS-SEM + XGBoost-SHAP + Random Forest</li>
+    <li>Semi-structured interviews with lecturers (n = 8–12)</li>
+    <li>Not tested: Multi-group analysis (MGA) → Future research direction</li>
+  </ul>
+</div>
+
+<div class="footer-note">
+  Note: (R) = Removed item after measurement refinement (see Section 7.7 &amp; Appendix A). All hypotheses (H1–H16) and R² values are aligned with Table 7.1 and Section 8.6.1.<br>
+  IR = Institutional Readiness; AIB = AI Interaction Behavior; PE = Process Efficiency; CE = Critical Evaluation; AD = AI Dependency; AER = Academic Ethical Responsibility; ACO = Academic and Career Outcomes.<br>
+  <b style="color:#b91c1c;">Corrections applied vs. original diagram: H7 p-value → p&lt;0,001 (was p=0,007); H8 β/t/p and conclusion → β=+0,015, t=0,305, p=0,649, NOT supported (was β=-0,087, p=0,123); H16 β/t/p and conclusion → β=-0,009, t=-0,210, p=0,869, NOT supported (was β=-0,172, p=0,049, shown as significant); fabricated f²=0,033 for H16 removed (not reported anywhere in text/tables).</b>
+</div>
+
+</div>
+</body>
+</html>
